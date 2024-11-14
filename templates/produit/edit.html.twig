@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Produit{% endblock %}
+
+{% block body %}
+<div class="w60 m-auto">
+    <h1 class="titre text-center my-5">SAISIE PRODUIT</h1>
+    
+    {{ include('produit/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+    
+    <div class="d-flex justify-content-between">
+        <a class="btn btn-md btn-primary" href="{{ path('app_produit_index') }}">Retour à la liste</a>
+        
+    {{ include('produit/_delete_form.html.twig') }}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categorie{% endblock %}
+
+{% block body %}
+<div class="w80 m-auto">
+    <h1 class="titre my-5">AFFICHAGE CATEGORIE</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ categorie.id }}</td>
+            </tr>
+            <tr>
+                <th>Prefixe</th>
+                <td>{{ categorie.prefixe }}</td>
+            </tr>
+            <tr>
+                <th>NumeroInitial</th>
+                <td>{{ categorie.numeroInitial }}</td>
+            </tr>
+            <tr>
+                <th>Libelle</th>
+                <td>{{ categorie.libelle }}</td>
+            </tr>
+            <tr>
+                <th>Format</th>
+                <td>{{ categorie.format }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="line-button">
+        <a class="btn btn-md btn-primary" href="{{ path('app_categorie_index') }}">Retour à la liste</a>
+
+        {{ include('categorie/_delete_form.html.twig') }}
+
+        <a class="btn btn-md btn-success" href="{{ path('app_categorie_edit', {'id': categorie.id}) }}">Modifier</a>
+    </div>
+</div>
+{% endblock %}

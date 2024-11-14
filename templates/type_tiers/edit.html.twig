@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit TypeTiers{% endblock %}
+
+{% block body %}
+    <h1>Edit TypeTiers</h1>
+
+    {{ include('type_tiers/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_type_tiers_index') }}">back to list</a>
+
+    {{ include('type_tiers/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produit index{% endblock %}
+
+{% block body %}
+<div class="w70 m-auto my-4">
+    <h1 class="titre text-center">LISTE PRODUIT</h1>
+
+    <a class="btn btn-md btn-primary my-4" href="{{ path('app_produit_new') }}">Nouveau produit</a>
+
+    <table class="table W100">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>NumProduit</th>
+                <th>Designation</th>
+                <th>PrixUnitaire</th>
+                <th>PrixRevient</th>
+                <th>Categorie</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produit in produits %}
+            <tr>
+                <td>{{ produit.id }}</td>
+                <td>{{ produit.numProduit }}</td>
+                <td>{{ produit.designation }}</td>
+                <td>{{ produit.prixUnitaire }}</td>
+                <td>{{ produit.prixRevient }}</td>
+                <td>{{ produit.categorie.libelle|default("")}}</td>
+                <td class="d-flex justify-content-between">
+                    <a class="btn btn-md btn-success" href="{{ path('app_produit_show', {'id': produit.id}) }}">Afficher</a>
+                    <a class="btn btn-md btn-primary" href="{{ path('app_produit_edit', {'id': produit.id}) }}">Modifier</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">Pas d'enregistrement</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    
+</div>
+{% endblock %}

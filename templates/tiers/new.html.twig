@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Tiers{% endblock %}
+
+{% block body %}
+    <h1>Create new Tiers</h1>
+
+    {{ include('tiers/_form.html.twig') }}
+
+    <a href="{{ path('app_tiers_index') }}">back to list</a>
+{% endblock %}

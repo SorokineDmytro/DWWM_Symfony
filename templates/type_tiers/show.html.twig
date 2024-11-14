@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TypeTiers{% endblock %}
+
+{% block body %}
+    <h1>TypeTiers</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ type_tier.id }}</td>
+            </tr>
+            <tr>
+                <th>Prefixe</th>
+                <td>{{ type_tier.prefixe }}</td>
+            </tr>
+            <tr>
+                <th>NumeroInitial</th>
+                <td>{{ type_tier.numeroInitial }}</td>
+            </tr>
+            <tr>
+                <th>Libelle</th>
+                <td>{{ type_tier.libelle }}</td>
+            </tr>
+            <tr>
+                <th>Format</th>
+                <td>{{ type_tier.format }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_type_tiers_index') }}">back to list</a>
+
+    <a href="{{ path('app_type_tiers_edit', {'id': type_tier.id}) }}">edit</a>
+
+    {{ include('type_tiers/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produit{% endblock %}
+
+{% block body %}
+<div class="w80 m-auto">
+    <h1 class="titre my-5">AFFICHAGE PRODUIT</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ produit.id }}</td>
+            </tr>
+            <tr>
+                <th>NumProduit</th>
+                <td>{{ produit.numProduit }}</td>
+            </tr>
+            <tr>
+                <th>Designation</th>
+                <td>{{ produit.designation }}</td>
+            </tr>
+            <tr>
+                <th>PrixUnitaire</th>
+                <td>{{ produit.prixUnitaire }}</td>
+            </tr>
+            <tr>
+                <th>PrixRevient</th>
+                <td>{{ produit.prixRevient }}</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div class="d-flex justify-content-between">
+    <a class="btn btn-md btn-primary" href="{{ path('app_produit_index') }}">Retour à la liste</a>
+
+    <a class="btn btn-md btn-success" href="{{ path('app_produit_edit', {'id': produit.id}) }}">Modifier</a>
+    
+    {{ include('produit/_delete_form.html.twig') }}
+</div>
+</div>
+{% endblock %}

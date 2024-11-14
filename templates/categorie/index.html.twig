@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categorie index{% endblock %}
+
+{% block body %}
+<div class="w70 m-auto my-4">
+    <h1 class="titre text-center">LISTE CATEGORIE</h1>
+    
+    <div class="line-button">
+    <a class="btn btn-md btn-primary my-4" href="{{ path('app_categorie_new') }}">Nouvelle catégorie</a>
+    <button class="btn btn-md btn-primary" onclick="window.print()">Imprimer</button>
+</div>
+
+    <table class="table w100">
+        <thead>
+            <tr class="table-success">
+                <th>Id</th>
+                <th>Prefixe</th>
+                <th>NumeroInitial</th>
+                <th>Libelle</th>
+                <th>Format</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for categorie in categories %}
+            <tr>
+                <td>{{ categorie.id }}</td>
+                <td>{{ categorie.prefixe }}</td>
+                <td>{{ categorie.numeroInitial }}</td>
+                <td>{{ categorie.libelle }}</td>
+                <td>{{ categorie.format }}</td>
+
+                <td class="d-flex justify-content-between">
+                    <a class="btn btn-md btn-success" href="{{ path('app_categorie_show', {'id': categorie.id}) }}">Afficher</a>
+                    <a class="btn btn-md btn-primary" href="{{ path('app_categorie_edit', {'id': categorie.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Pas d'enregistrement</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}

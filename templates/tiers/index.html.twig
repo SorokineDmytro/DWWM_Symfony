@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tiers index{% endblock %}
+
+{% block body %}
+<h1 class="titre text-center">LISTE TIERS</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>NumTiers</th>
+                <th>NomTiers</th>
+                <th>AdresseTiers</th>
+                <th>TypeTiers</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tier in tiers %}
+            <tr>
+                <td>{{ tier.id }}</td>
+                <td>{{ tier.numTiers }}</td>
+                <td>{{ tier.nomTiers }}</td>
+                <td>{{ tier.adresseTiers }}</td>
+                <td>{{ tier.typeTiers.libelle|default("")}}</td>
+                <td>
+                    <a href="{{ path('app_tiers_show', {'id': tier.id}) }}">show</a>
+                    <a href="{{ path('app_tiers_edit', {'id': tier.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_tiers_new') }}">Create new</a>
+{% endblock %}

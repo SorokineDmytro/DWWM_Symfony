@@ -1,0 +1,62 @@
+*{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+#p_id{
+    color:white;
+    position:absolute;
+    top:10px;
+    left:50%;
+}
+.photo{
+    width:800px;
+    height:600px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 2px;
+
+}
+#container{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height:100vh;
+    /* background-color: black; */
+    background-image: url("../img/fond-degrade.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+#carrosel{
+    width:800px;
+    height: 600px;
+    background-color: white;
+    border-radius: 5px;
+    position:relative;
+    overflow: hidden;
+}
+#carrosel_content{
+    width:800px;
+    height: 600px;
+    background-color: white;
+    border-radius: 5px;
+    display:flex;
+}
+#g{
+    position:absolute;
+    top:45%;
+    left:5px;
+    transform:rotate(180deg);
+    cursor:pointer;
+}
+#d{
+    position:absolute;
+    top:45%;
+    right:5px;
+    transform:rotate(0deg);
+    cursor:pointer;
+}

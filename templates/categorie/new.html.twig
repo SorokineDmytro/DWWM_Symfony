@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %} {% block title %}New Categorie{% endblock %} {%
+block body %}
+<div class="w80 m-auto">
+  <h1 class="titre my-5">CREATION CATEGORIE</h1>
+
+  {{ include("categorie/_form.html.twig") }}
+
+  <div class="line-button">
+    <a class="btn btn-md btn-primary mt-2" href="{{ path('app_categorie_index') }}">Retour à la liste</a>
+    <button class="btn btn-md btn-success" onclick="submit.click()">
+      Valider
+    </button>
+  </div>
+</div>
+{% endblock %}
