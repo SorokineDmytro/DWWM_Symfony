@@ -3,9 +3,11 @@
 {% block title %}New Tiers{% endblock %}
 
 {% block body %}
-    <h1>Create new Tiers</h1>
+<div class="w70 m-auto">
+        <h1 class="titre my-5">CREATION TIERS</h1>
 
     {{ include('tiers/_form.html.twig') }}
 
-    <a href="{{ path('app_tiers_index') }}">back to list</a>
+    <a class="btn btn-md btn-primary mt-2" href="{{ path('app_tiers_index') }}">Retour à la liste</a>
+</div>
 {% endblock %}

@@ -39,7 +39,7 @@ class ProduitType extends AbstractType
             ->add('categorie', EntityType::class, [
                 'label' => 'Categorie',
                 'class' => Categorie::class,
-                'choice_label' => 'libelle',
+                // 'choice_label' => 'libelle',
                 'label_attr' => ['class' => 'lab30'],
                 'attr' => ['class' => 'form-select w70 text-end mt-2']
             ])

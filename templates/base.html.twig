@@ -72,7 +72,19 @@
                                     data-bs-auto-close="outside">Paramêtre</a>
                                 <ul class="dropdown-menu bg-dark">
                                     <li class="nav-item ms-2">
-                                        <a href="{{ path('app_categorie_index') }}" class="nav-link text-white">Catégorie</a>
+                                        <a href="/categorie" class="nav-link text-white">Catégorie</a>
+                                    </li>
+                                    <li class="nav-item ms-2">
+                                        <a href="/user" class="nav-link text-white">User</a>
+                                    </li>
+                                    <li class="nav-item ms-2">
+                                        <a href="/role" class="nav-link text-white">Role</a>
+                                    </li>
+                                    <li class="nav-item ms-2">
+                                        <a href="/typetiers" class="nav-link text-white">Type Tiers</a>
+                                    </li>
+                                    <li class="nav-item ms-2">
+                                        <a href="/typemouvement" class="nav-link text-white">Type Mouvement</a>
                                     </li>
                                 </ul>
                             </li>
@@ -150,7 +162,8 @@
             </main>
             <footer class="bg-blueNight orange d-flex justify-content-center align-items-center mt-2 w-100">
                 <h3>CopyRight &copy DWWM-2024</h3>
-
+                
+                {%block script%}
                 <script>
             function getMessage() {
                 fetch("index.php?page=message_read").then(response => response.json()).then(messages => {
@@ -218,6 +231,7 @@
                 })
             }
         </script>
+        {%endblock%}
 
     </body>
 

@@ -1,0 +1,19 @@
+{% extends "base.html.twig" %}
+
+{% block body%}
+    <div class="w80 m-auto">
+        <h1 class="titre">{{title|upper}}</h1>
+        {{form_start(form)}}
+            {{form_row(form.prefixe)}}
+            {{form_row(form.libelle)}}
+            {{form_row(form.format)}}
+            {{form_row(form.numeroInitial)}}
+            <div class="line-button">
+                <button href="{{path('app_type_mouvement')}}" class="btn bnt-medium btn-primary">Retour à la liste</button>
+                <button type="reset" class="btn bnt-medium btn-primary">Annuler</button>
+                <button type="submit" class="btn bnt-medium btn-primary">Valider</button>
+            </div>
+        {{form_end(form)}}
+    </div>
+
+{% endblock %}

@@ -2,13 +2,13 @@
 
 namespace App\Form;
 
-use App\Entity\TypeTiers;
+use App\Entity\TypeMouvement;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class TypeTiersType extends AbstractType
+class TypeMouvementType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -29,6 +29,13 @@ class TypeTiersType extends AbstractType
                     'autocomplete' => 'off'
                 ]
             ])
+            ->add('format', TextType::class, [
+                'label' => 'Format',
+                'label_attr' => ['class' => 'lab30 obligatoire'],
+                'attr' => [
+                    'class' => 'form-control w70'
+                ]
+            ])
             ->add('numeroInitial', TextType::class, [
                 'label' => 'N° Initial',
                 'label_attr' => ['class' => 'lab30'],
@@ -38,20 +45,13 @@ class TypeTiersType extends AbstractType
                 ],
                 'required' => false
             ])
-            ->add('format', TextType::class, [
-                'label' => 'Format',
-                'label_attr' => ['class' => 'lab30 obligatoire'],
-                'attr' => [
-                    'class' => 'form-control w70'
-                ]
-            ])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => TypeTiers::class,
+            'data_class' => TypeMouvement::class,
         ]);
     }
 }

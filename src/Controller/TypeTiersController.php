@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/type/tiers')]
+#[Route('/typetiers')]
 final class TypeTiersController extends AbstractController
 {
     #[Route(name: 'app_type_tiers_index', methods: ['GET'])]

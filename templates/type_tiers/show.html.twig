@@ -3,7 +3,8 @@
 {% block title %}TypeTiers{% endblock %}
 
 {% block body %}
-    <h1>TypeTiers</h1>
+<div class="w80 m-auto">
+    <h1 class="titre my-5">AFFICHAGE TYPETIERS</h1>
 
     <table class="table">
         <tbody>
@@ -30,9 +31,12 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_type_tiers_index') }}">back to list</a>
+    <div class="d-flex justify-content-between">
+        <a class="btn btn-md btn-primary" href="{{ path('app_type_tiers_index') }}">Retour à la liste</a>
 
-    <a href="{{ path('app_type_tiers_edit', {'id': type_tier.id}) }}">edit</a>
-
-    {{ include('type_tiers/_delete_form.html.twig') }}
+        <a class="btn btn-md btn-success" href="{{ path('app_type_tiers_edit', {'id': type_tier.id}) }}">Modifier</a>
+        
+        {{ include('type_tiers/_delete_form.html.twig') }}
+    </div>
+</div>
 {% endblock %}

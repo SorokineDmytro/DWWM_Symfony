@@ -34,7 +34,7 @@ class TiersType extends AbstractType
             ->add('typeTiers', EntityType::class, [
                 'label' => 'TypeTiers',
                 'class' => TypeTiers::class,
-                'choice_label' => 'libelle',
+                // 'choice_label' => 'libelle',
                 'label_attr' => ['class' => 'lab30'],
                 'attr' => ['class' => 'form-select w70 text-end mt-2']
             ])

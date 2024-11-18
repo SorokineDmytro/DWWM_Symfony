@@ -3,11 +3,15 @@
 {% block title %}Edit TypeTiers{% endblock %}
 
 {% block body %}
-    <h1>Edit TypeTiers</h1>
+<div class="w60 m-auto">
+    <h1 class="titre text-center my-5">SAISIE TYPE TIERS</h1>
 
-    {{ include('type_tiers/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('type_tiers/_form.html.twig', {'button_label': 'Enregistrer'}) }}
 
-    <a href="{{ path('app_type_tiers_index') }}">back to list</a>
+    <div class="d-flex justify-content-between">
+        <a class="btn btn-md btn-primary" href="{{ path('app_type_tiers_index') }}">Retour à la liste</a>
 
     {{ include('type_tiers/_delete_form.html.twig') }}
+    </div>
+</div>
 {% endblock %}

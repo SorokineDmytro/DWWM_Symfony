@@ -5,6 +5,8 @@
 {% block body %}
 <h1 class="titre text-center">LISTE TIERS</h1>
 
+    <a class="btn btn-md btn-primary my-4" href="{{ path('app_tiers_new') }}">Nouveau tiers</a>
+    
     <table class="table">
         <thead>
             <tr>
@@ -24,9 +26,9 @@
                 <td>{{ tier.nomTiers }}</td>
                 <td>{{ tier.adresseTiers }}</td>
                 <td>{{ tier.typeTiers.libelle|default("")}}</td>
-                <td>
-                    <a href="{{ path('app_tiers_show', {'id': tier.id}) }}">show</a>
-                    <a href="{{ path('app_tiers_edit', {'id': tier.id}) }}">edit</a>
+                <td class="d-flex justify-content-between">
+                    <a class="btn btn-md btn-success" href="{{ path('app_tiers_show', {'id': tier.id}) }}">Afficher</a>
+                    <a class="btn btn-md btn-primary" href="{{ path('app_tiers_edit', {'id': tier.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -37,5 +39,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_tiers_new') }}">Create new</a>
 {% endblock %}

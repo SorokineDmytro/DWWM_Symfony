@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="w90 m-auto">
+        <h1 class="titre text-center">{{title|upper}}</h1>
+        <div class="line-button">
+            <a class="btn btn-md btn-primary my-4" href="{{ path('app_type_mouvement_new') }}">Créer</a>
+            <button class="btn btn-md btn-success my-4" href="">Importer</button>
+            <button class="btn btn-md btn-success my-4" href="">Exporter</button>
+            <button class="btn btn-md btn-primary my-4" href="" onclick="window.print()">Imprimer</button>
+        </div>
+        <table class="table w-100">
+            <thead>
+                <tr class="table-success text-light">
+                    <th class="border border-light text-center">Id</th>
+                    <th class="border border-light text-center">Prefixe</th>
+                    <th class="border border-light text-center">Libelle</th>
+                    <th class="border border-light text-center">NumeroInitial</th>
+                    <th class="border border-light text-center">Format</th>
+                    <th class="border border-light text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tm in typeMouvement %}
+                <tr>
+                    <td class="text-center">{{ tm.id }}</td>
+                    <td class="text-center">{{ tm.prefixe }}</td>
+                    <td class="text-center">{{ tm.libelle }}</td>
+                    <td class="text-center">{{ tm.numeroInitial }}</td>
+                    <td class="text-center">{{ tm.format }}</td>
+                    <td class="d-flex justify-content-between">
+                        <a class="btn btn-md btn-success" href="{{path('app_type_mouvement_show',{'id':tm.id})}}">Afficher</a>
+                        <a class="btn btn-md btn-danger" href="javascript:supprimer({{tm.id}})">Supprimer</a>
+                        <a class="btn btn-md btn-primary" href="{{path('app_type_mouvement_update',{'id':tm.id})}}">Modifier</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6">Pas d'enregistrement</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{%block script%}
+<script>
+    let url_delete= "{{path('app_type_mouvement_delete', {'id':'id'})}}";
+    let url_search = "{{path('app_type_mouvement_search', {'mot':'mot'})}}";
+    let url_index = "{{path('app_type_mouvement')}}";
+
+    function supprimer(id){
+        let response=confirm("Vous êtes sur de supprimer ce type mouvement?");
+        if(response){
+            const url=url_delete.replace('id',id);
+            document.location.href=url;
+        }
+    }
+
+    function chercher(event) {
+        let chaine = mot.value;
+        let url = url_index;
+        if(chaine) {
+            url = url_search.replace('mot', chaine);
+        }
+        document.location.href = url;
+    }
+
+    function touche(event) {
+    if (event.keyCode == 13) {
+      chercher();
+    }
+    } 
+
+</script>
+{%endblock%} 

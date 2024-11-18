@@ -1,0 +1,28 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="w-50 m-auto">
+        <h1 class="titre">{{title|upper}}</h1>
+        <table class="w-100">
+            <tr>
+                <td>ID</td>
+                <td>{{typeMouvement.id}}</td>
+            </tr>
+            <tr>
+                <td>Prefixe</td>
+                <td>{{typeMouvement.prefixe}}</td>
+            </tr>
+            <tr>
+                <td>Libelle</td>
+                <td>{{typeMouvement.libelle}}</td>
+            </tr>
+            <tr>
+                <td>№ Initial</td>
+                <td>{{typeMouvement.numeroInitial}}</td>
+            </tr>
+        </table>
+        <div class="line-button">
+            <a href="{{path('app_type_mouvement')}}" class="btn btn-medium btn-success">Retour à la liste</a>
+        </div>
+    </div>
+{% endblock %}

@@ -3,11 +3,15 @@
 {% block title %}Edit Tiers{% endblock %}
 
 {% block body %}
-    <h1>Edit Tiers</h1>
-
-    {{ include('tiers/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_tiers_index') }}">back to list</a>
+<div class="w60 m-auto">
+    <h1 class="titre text-center my-5">SAISIE TIERS</h1>
+    
+    
+    {{ include('tiers/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+    <div class="d-flex justify-content-between">
+        <a class="btn btn-md btn-primary" href="{{ path('app_tiers_index') }}">Retour à la liste</a>
 
     {{ include('tiers/_delete_form.html.twig') }}
+    </div>
+</div>
 {% endblock %}

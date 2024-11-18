@@ -32,11 +32,11 @@
     </table>
     
     <div class="d-flex justify-content-between">
-    <a class="btn btn-md btn-primary" href="{{ path('app_produit_index') }}">Retour à la liste</a>
+        <a class="btn btn-md btn-primary" href="{{ path('app_produit_index') }}">Retour à la liste</a>
 
-    <a class="btn btn-md btn-success" href="{{ path('app_produit_edit', {'id': produit.id}) }}">Modifier</a>
+        <a class="btn btn-md btn-success" href="{{ path('app_produit_edit', {'id': produit.id}) }}">Modifier</a>
     
-    {{ include('produit/_delete_form.html.twig') }}
-</div>
+        {{ include('produit/_delete_form.html.twig') }}
+    </div>
 </div>
 {% endblock %}
