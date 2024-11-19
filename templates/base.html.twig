@@ -163,7 +163,7 @@
             <footer class="bg-blueNight orange d-flex justify-content-center align-items-center mt-2 w-100">
                 <h3>CopyRight &copy DWWM-2024</h3>
                 
-                {%block script%}
+                {%block script%}{%endblock%}
                 <script>
             function getMessage() {
                 fetch("index.php?page=message_read").then(response => response.json()).then(messages => {
@@ -230,13 +230,18 @@
                     alert("Il existe une erreur!");
                 })
             }
+
+            function touche(event) {
+                if(event.keyCode == 13) {
+                  chercher();
+                }
+            }
         </script>
-        {%endblock%}
+        
 
     </body>
 
 </html>
 
 
-    <!-- let sous_menu=document.getElementById('sousmenu'); -->
     

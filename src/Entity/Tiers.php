@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TiersRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TiersRepository::class)]
@@ -25,6 +27,17 @@ class Tiers
     #[ORM\ManyToOne(inversedBy: 'tiers')]
     #[ORM\JoinColumn(name:'typeTiers_id', nullable: false)]
     private ?TypeTiers $typeTiers = null;
+
+    /**
+     * @var Collection<int, Mouvement>
+     */
+    #[ORM\OneToMany(targetEntity: Mouvement::class, mappedBy: 'tiers')]
+    private Collection $mouvements;
+
+    public function __construct()
+    {
+        $this->mouvements = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -75,6 +88,36 @@ class Tiers
     public function setTypeTiers(?TypeTiers $typeTiers): static
     {
         $this->typeTiers = $typeTiers;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Mouvement>
+     */
+    public function getMouvements(): Collection
+    {
+        return $this->mouvements;
+    }
+
+    public function addMouvement(Mouvement $mouvement): static
+    {
+        if (!$this->mouvements->contains($mouvement)) {
+            $this->mouvements->add($mouvement);
+            $mouvement->setTiers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMouvement(Mouvement $mouvement): static
+    {
+        if ($this->mouvements->removeElement($mouvement)) {
+            // set the owning side to null (unless already changed)
+            if ($mouvement->getTiers() === $this) {
+                $mouvement->setTiers(null);
+            }
+        }
 
         return $this;
     }

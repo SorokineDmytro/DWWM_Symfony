@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mouvement index{% endblock %}
+
+{% block body %}
+<div class="w90 m-auto">
+    <h1 class="titre">{{title | upper}}</h1>
+    <div class="line-button">
+        <button class="btn btn-md btn-primary my-4" onclick="creer()">Créer</button>
+        <button class="btn btn-md btn-primary my-4" onclick="window.print()">Imprimer</button>
+        <button class="btn btn-md btn-primary my-4" onclick="quitter()">Quitter</button>
+    </div>
+    <table class="table w-100">
+        <thead>
+            <tr class="table-success text-light">
+                <th class="border border-light text-center">Id</th>
+                <th class="border border-light text-center">№ Mouvement</th>
+                <th class="border border-light text-center">Date</th>
+                <th class="border border-light text-center">Type</th>
+                <th class="border border-light text-center">Tiers ID</th>
+                <th class="border border-light text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mouvement in mouvements %}
+            <tr>
+                <td class="text-center">{{ mouvement.id }}</td>
+                <td class="text-center">{{ mouvement.numMouvement }}</td>
+                <td class="text-center">{{ mouvement.dateMouvement | date('d/m/Y') }}</td>
+                <td class="text-center">{{ mouvement.typeMouvement.libelle }}</td>
+                <td class="text-center">{{ mouvement.tiers.nomTiers }}</td>
+                <td class="d-flex justify-content-between">
+                    <button class="btn btn-md btn-success" onclick="afficher({{ mouvement.id }})">Afficher</button>
+                    <button class="btn btn-md btn-danger" onclick="supprimer({{ mouvement.id }})">Supprimer</button>
+                    <button class="btn btn-md btn-primary" onclick="modifier({{ mouvement.id }})">Modifier</button>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6 text-center">Pas d'enregistrement</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    function creer() {
+        window.document.location.href = "/mouvement/new"
+    }
+
+    function afficher(id) {
+        window.document.location.href = "/mouvement/show/" + id;
+    }
+
+    function modifier(id) {
+        window.document.location.href = "/mouvement/edit/" + id;
+    }
+
+    function supprimer(id) {
+        let response = confirm("êtes-vous sur de supprimer ce mouvement ?");
+        if(response == true) {
+            window.document.location.href = "/mouvement/delete/" + id;
+        }
+    }
+
+    function quitter() {
+        window.document.location.href = "/"
+    }
+
+</script>
+{% endblock %}
+

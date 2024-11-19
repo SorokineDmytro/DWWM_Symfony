@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="w90 m-auto">
+        <h1 class="titre">{{title | upper}}</h1>
+        <div class="line-button">
+            <button class="btn btn-md btn-primary my-4" onclick="creer()">Créer</button>
+            <button class="btn btn-md btn-primary my-4" onclick="window.print()">Imprimer</button>
+            <button class="btn btn-md btn-primary my-4" onclick="quitter()">Quitter</button>
+        </div>
+        <table class="table w-100">
+            <thead>
+                <tr class="table-success text-light">
+                    <th class="border border-light text-center">Id</th>
+                    <th class="border border-light text-center">№ Mouvement</th>
+                    <th class="border border-light text-center">Date</th>
+                    <th class="border border-light text-center">Type</th>
+                    <th class="border border-light text-center">Tiers ID</th>
+                    <th class="border border-light text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tbody_mvt">
+                {% for mvt in mouvements %}
+                <tr>
+                    <td class="text-center">{{ mvt.id }}</td>
+                    <td class="text-center">{{ mvt.numMouvement }}</td>
+                    <td class="text-center">{{ mvt.dateMouvement | date('d/m/Y') }}</td>
+                    <td class="text-center">{{ mvt.typeMouvement.libelle }}</td>
+                    <td class="text-center">{{ mvt.tiers.nomTiers }}</td>
+                    <td class="d-flex justify-content-between">
+                        <button class="btn btn-md btn-success" onclick="contenu({{ mvt.id }})">Contenu</button>
+                        <button class="btn btn-md btn-primary" onclick="afficher({{ mvt.id }})">Afficher</button>
+                        <button class="btn btn-md btn-primary" onclick="modifier({{ mvt.id }})">Modifier</button>
+                        <button class="btn btn-md btn-danger" onclick="supprimer({{ mvt.id }})">Suprimer</button>
+                        <button class="btn btn-md btn-success" onclick="imprimerMouvement({{ mvt.id }})">Imprimer</button>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6 text-center">Pas d'enregistrement</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block script %}
+<script>
+    let url_new = "{{path('app_mvt_new')}}";
+    let url_show = "{{path('app_mvt_show',{'id':'id'})}}"; // = /mvt/show/id
+    let url_update = "{{path('app_mvt_update',{'id':'id'})}}"; // = /mvt/update/id
+    let url_delete = "{{path('app_mvt_delete',{'id':'id'})}}"; // = /mvt/delete/id
+    let url_search_fetch = "{{path('app_mvt_search_fetch')}}"; // = /mvt/search/id
+
+    function creer() {
+        let url = url_new;
+        document.location.href = url;
+    }
+
+    function afficher(id) {
+        let url = url_show.replace('id',id);
+        document.location.href = url;
+    }
+
+    function modifier(id) {
+        let url = url_update.replace('id',id);
+        document.location.href = url;
+    }
+
+    function supprimer(id) {
+        let url = url_delete.replace('id',id);
+        const response = confirm("Êtes-vous sur de supprimer ce mouvement ?");
+        if(response == true) {
+            document.location.href = url
+        }
+    }
+
+    function quitter() {
+        document.location.href = "/"
+    }
+
+    function chercher(){
+        let data=new FormData();
+        data.append('mot',mot.value);
+        fetch(url_search_fetch,{
+            method:'POST',
+            body:data
+        })
+        .then(response=>response.json())
+        .then(rows=>{
+            console.log(rows);
+            let html=rows.map(row=>{
+                return `
+                <tr>
+                    <td>${row.id}</td>
+                    <td>${row.numMouvement}</td>
+                    <td>${row.dateMouvement}</td>
+                    <td>${row.typeMouvement}</td>
+                    <td>${row.tiers}</td>
+                    <td class="d-flex justify-content-between">
+                        <button class="btn btn-md btn-success" onclick="saisirLigneMouvement(${row.id}.id})">Contenu</button>
+                        <button class="btn btn-md btn-success" onclick="afficher(${row.id})">Afficher</button>
+                        <button class="btn btn-md btn-success" onclick="modifier(${row.id})">Modifier</button>
+                        <button class="btn btn-md btn-success" onclick="supprimer(${row.id})">Supprimer</button>
+                        <button class="btn btn-md btn-success" onclick="imprimerMouvement(${row.id})">Imprimer</button>
+                    </td>
+                </tr>
+                `
+            }).join('');
+            tbody_mvt.innerHTML = html;
+        })
+    }
+</script>
+{% endblock %}

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TypeMouvementRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TypeMouvementRepository::class)]
@@ -25,6 +27,17 @@ class TypeMouvement
 
     #[ORM\Column(length: 10)]
     private ?string $format = null;
+
+    /**
+     * @var Collection<int, Mouvement>
+     */
+    #[ORM\OneToMany(targetEntity: Mouvement::class, mappedBy: 'typeMouvement')]
+    private Collection $tirs;
+
+    public function __construct()
+    {
+        $this->tirs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -77,5 +90,40 @@ class TypeMouvement
         $this->format = $format;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Mouvement>
+     */
+    public function getTirs(): Collection
+    {
+        return $this->tirs;
+    }
+
+    public function addTir(Mouvement $tir): static
+    {
+        if (!$this->tirs->contains($tir)) {
+            $this->tirs->add($tir);
+            $tir->setTypeMouvement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTir(Mouvement $tir): static
+    {
+        if ($this->tirs->removeElement($tir)) {
+            // set the owning side to null (unless already changed)
+            if ($tir->getTypeMouvement() === $this) {
+                $tir->setTypeMouvement(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->prefixe." - ".$this->libelle;
     }
 }

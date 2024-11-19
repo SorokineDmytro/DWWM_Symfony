@@ -1,0 +1,32 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="w-50 m-auto">
+        <h1 class="titre">{{title|upper}}</h1>
+        <table class="w-100">
+            <tr>
+                <td>ID</td>
+                <td>{{ mouvement.id }}</td>
+            </tr>
+            <tr>
+                <td>№ Mouvement</td>
+                <td>{{ mouvement.numMouvement }}</td>
+            </tr>
+            <tr>
+                <td>Date Mouvement</td>
+                <td>{{ mouvement.dateMouvement | date('d/m/Y') }}</td>
+            </tr>
+            <tr>
+                <td>Type Mouvement</td>
+                <td>{{ mouvement.typeMouvement.libelle }}</td>
+            </tr>
+            <tr>
+                <td>Tiers</td>
+                <td>{{ mouvement.tiers.nomTiers }}</td>
+            </tr>
+        </table>
+        <div class="line-button">
+            <a href="/mouvement" class="btn btn-medium btn-success">Retour à la liste</a>
+        </div>
+    </div>
+{% endblock %}

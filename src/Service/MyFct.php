@@ -22,4 +22,11 @@
             $em->flush();
             return $numEntity;
         }
+
+        function printr($array){
+            echo "<pre>";
+            print_r($array);
+            echo "</pre>";
+            die;
+        } 
     }
