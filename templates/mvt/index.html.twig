@@ -28,7 +28,7 @@
                     <td class="text-center">{{ mvt.typeMouvement.libelle }}</td>
                     <td class="text-center">{{ mvt.tiers.nomTiers }}</td>
                     <td class="d-flex justify-content-between">
-                        <button class="btn btn-md btn-success" onclick="contenu({{ mvt.id }})">Contenu</button>
+                        <button class="btn btn-md btn-success" onclick="saisirLigneMouvement({{ mvt.id }})">Contenu</button>
                         <button class="btn btn-md btn-primary" onclick="afficher({{ mvt.id }})">Afficher</button>
                         <button class="btn btn-md btn-primary" onclick="modifier({{ mvt.id }})">Modifier</button>
                         <button class="btn btn-md btn-danger" onclick="supprimer({{ mvt.id }})">Suprimer</button>
@@ -51,6 +51,7 @@
     let url_update = "{{path('app_mvt_update',{'id':'id'})}}"; // = /mvt/update/id
     let url_delete = "{{path('app_mvt_delete',{'id':'id'})}}"; // = /mvt/delete/id
     let url_search_fetch = "{{path('app_mvt_search_fetch')}}"; // = /mvt/search/id
+    let url_ligne_mouvement = "{{path('app_mvt_ligne',{'id':'id'})}}"; // = /mvt/ligne/id
 
     function creer() {
         let url = url_new;
@@ -98,7 +99,7 @@
                     <td>${row.typeMouvement}</td>
                     <td>${row.tiers}</td>
                     <td class="d-flex justify-content-between">
-                        <button class="btn btn-md btn-success" onclick="saisirLigneMouvement(${row.id}.id})">Contenu</button>
+                        <button class="btn btn-md btn-success" onclick="saisirLigneMouvement(${row.id})">Contenu</button>
                         <button class="btn btn-md btn-success" onclick="afficher(${row.id})">Afficher</button>
                         <button class="btn btn-md btn-success" onclick="modifier(${row.id})">Modifier</button>
                         <button class="btn btn-md btn-success" onclick="supprimer(${row.id})">Supprimer</button>
@@ -109,6 +110,12 @@
             }).join('');
             tbody_mvt.innerHTML = html;
         })
+    }
+
+    function saisirLigneMouvement(mouvement_id) {
+        url = url_ligne_mouvement.replace('id',mouvement_id);
+        document.location.href = url;
+ 
     }
 </script>
 {% endblock %}

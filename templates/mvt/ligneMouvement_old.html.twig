@@ -1,0 +1,200 @@
+{% extends 'base.html.twig' %}
+
+{% block style %}
+    <style>
+        .montant {
+            font-size: 2.5em;
+            display: flex;
+            justify-content: end;
+            align-items: end;
+            height: 180px;
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 10px;
+            font-weight: 700;
+        }
+        #th_proposition {
+            position: relative;
+        }
+        #proposition {
+            position: absolute;
+            top: 100%;
+            background-color: #fff;
+            max-height: 150px;
+            width: 100%;
+            overflow-y: scroll;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="w100 m-auto">
+        <h1 class="titre">{{title | upper}}</h1>
+        <div class="row">
+            <div class="col-8">
+                <div class="line-input hide">
+                    <label for="id" class="lab30">Id</label>
+                    <input type="text" id="id" class="form-controle w70" name="id" value="{{mouvement.id}}" >
+                </div>
+                <div class="line-input">
+                    <label for="numMouvement" class="lab30">№ Mouvement</label>
+                    <input type="text" id="numMouvement" class="form-controle w70" name="numMouvement" value="{{mouvement.numMouvement}}" disabled>
+                </div>
+                <div class="line-input">
+                    <label for="dateMouvement" class="lab30">Date Mouvement</label>
+                    <input type="text" id="dateMouvement" class="form-controle w70" name="dateMouvement" value="{{mouvement.dateMouvement | date('d/m/Y')}}" disabled>
+                </div>
+                <div class="line-input">
+                    <label for="tiers" class="lab30">Tiers</label>
+                    <input type="text" id="tiers" class="form-controle w70" name="tiers" value="{{mouvement.tiers.nomTiers}}" disabled>
+                </div>
+                <div class="line-input">
+                    <label for="typeMouvement" class="lab30">Type Mouvement</label>
+                    <input type="text" id="typeMouvement" class="form-controle w70" name="typeMouvement" value="{{mouvement.typeMouvement.libelle}}" disabled>
+                </div>
+            </div>
+            <div class="col-4">
+                <p class="montant" id="p_total">0.00 €</p>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+            <a href="{{path('app_mvt')}}" class="btn bnt-medium btn-primary">Mouvement</a>
+            <button class="btn bnt-medium btn-primary" onclick="modifier()">Modifier</button>
+            <button class="btn bnt-medium btn-danger" onclick="supprimer()">Supprimer</button>
+            <button class="btn bnt-medium btn-primary" onclick="imprimer()">PDF</button>
+            <a href="{{path('app_accueil')}}" class="btn bnt-medium btn-primary">Quitter</a>
+        </div>
+        <table class="table w100">
+            <thead>
+                <tr class="table-success">
+                    <th class="w5 text-center"><input type="checkbox"></th>
+                    <th class="w25 text-center">CODE</th>
+                    <th class="w45 text-center">DESIGNATION</th>
+                    <th class="w10 text-center">PU</th>
+                    <th class="w10 text-center">QUANTITE</th>
+                    <th class="w10 text-center">MONTANT</th>
+                </tr>
+                <tr>
+                    <th id="th_proposition" class="w25 text-center" colspan="2">
+                        <input type="text" id="numProduit" name="numProduit" class="form-control text-center" placeholder="CODE">
+                        <div id="proposition">Hello</div>
+                    </th>
+                    <th class="w40 text-center"><input type="text" id="designation" name="designation" class="form-control text-center" disabled></th>
+                    <th class="w10 text-center"><input type="text" id="prixUnitaire" name="prixUnitaire" class="form-control text-center" disabled></th>
+                    <th class="w10 text-center"><input type="text" id="quantite" name="quantite" class="form-control text-end" placeholder="0.00"></th>
+                    <th class="w10 text-center"><button class="btn bnt-medium btn-primary w100" onclick="valider()">Valider</button></th>
+                </tr>
+            </thead>
+            <tbody id="tbody_ligne_mouvement">
+                {# {% for ligne in ligneMouvements %}
+                {% set montant = ligne.quantite * ligne.prixUnitaire %}
+                    <tr>
+                        <td class="w5 text-center"><input type="checkbox" id="{{ligne.id}}" name="choix" onclick="onlyOne(this)"></td>
+                        <td class="w25 text-center">{{ligne.produit.numProduit}}</td>
+                        <td class="w40 text-center">{{ligne.produit.designation}}</td>
+                        <td class="w10 text-center">{{ligne.prixUnitaire}}</td>
+                        <td class="w10 text-center">{{ligne.quantite}}</td>
+                        <td class="w10 text-center">{{montant}}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                {% endfor %} #}
+            </tbody>
+            <tfoot>
+                <tr class="table-success">
+                    <td class="text-end" colspan="5">Montant:</td>
+                    <td class="text-center" id="th_total">0.00 €</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    let url_mouvement_search_produit = "{{path('app_mvt_search_produit')}}";
+    let url_tbody_fetch = "{{path('app_mvt_ligne_tbody',{'id':'id'})}}";
+    proposition.style.visibility="hidden";
+    remplirTbody();
+    function remplirTbody() {
+        alert('ok');
+        let url = url_tbody_fetch.replace('id', id.value);
+        alert(url);
+        
+        fetch(url);
+        .then(response => response.json())
+        .then(response => {
+            let rows = response.rows;
+            let total = response.total;
+            let html = rows.map(row => {
+                return `
+                    <tr>
+                        <td class='w5 text-center'><input type='checkbox' id='${row.id}' name='choix' onclick='onlyOne(this)'></td>
+                        <td class='w25 text-center'>${row.numProduit}</td>
+                        <td class='w40 text-center'>${row.designtion}</td>
+                        <td class='w10 text-center'>${row.prixUnitaire}</td>
+                        <td class='w10 text-center'>${row.quantite}</td>
+                        <td class='w10 text-center'>${row.montant}</td>
+                    </tr>
+                `
+            }).join('');
+        tbody_ligne_mouvement.innerHTML = html;
+        th_total.textContent=total+" €";
+        p_total.textContent=total+" €";
+        })
+    }
+
+    numProduit.addEventListener('keyup',event=>{
+      if(event.keyCode!=13){
+        proposition.style.visibility="visible";
+        let data=new FormData();
+        data.append("mot",numProduit.value);
+        fetch(url_mouvement_search_produit,{
+          method:"POST",
+          body:data,
+        })
+        .then(response=>{
+          return response.json()
+        })
+        .then(rows=>{
+          let html=rows.map(row=>{
+            return `
+              <p id="${row.numProduit}">${row.numProduit}-${row.designation}</p>
+            `
+          }).join('');
+          proposition.innerHTML=html;
+        })
+      }else{
+        proposition.style.visibility="hidden";
+        // let data = new FormData();
+        // data.append('mouvement_id', id.value);
+        // data.append('numProduit', numProduit.value);
+        // data.append('quantite', quantite.value);
+        // alert("Vous avez valider");
+      }
+    })
+    proposition.addEventListener('click', event=>{
+
+        proposition.style.visibility = "hidden";
+        numProduit.value = event.target.id;
+        numProduit.focus();
+    })
+
+    function modifier(){
+        
+    }
+    function supprimer(){
+
+    }
+    function imprimer(){
+
+    }
+</script>
+{% endblock %}

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MouvementRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,6 +27,17 @@ class Mouvement
 
     #[ORM\ManyToOne(inversedBy: 'tiers')]
     private ?Tiers $tiers = null;
+
+    /**
+     * @var Collection<int, LigneMouvement>
+     */
+    #[ORM\OneToMany(targetEntity: LigneMouvement::class, mappedBy: 'mouvement')]
+    private Collection $ligneMouvements;
+
+    public function __construct()
+    {
+        $this->ligneMouvements = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -75,6 +88,36 @@ class Mouvement
     public function setTiers(?Tiers $tiers): static
     {
         $this->tiers = $tiers;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LigneMouvement>
+     */
+    public function getLigneMouvements(): Collection
+    {
+        return $this->ligneMouvements;
+    }
+
+    public function addLigneMouvement(LigneMouvement $ligneMouvement): static
+    {
+        if (!$this->ligneMouvements->contains($ligneMouvement)) {
+            $this->ligneMouvements->add($ligneMouvement);
+            $ligneMouvement->setMouvement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLigneMouvement(LigneMouvement $ligneMouvement): static
+    {
+        if ($this->ligneMouvements->removeElement($ligneMouvement)) {
+            // set the owning side to null (unless already changed)
+            if ($ligneMouvement->getMouvement() === $this) {
+                $ligneMouvement->setMouvement(null);
+            }
+        }
 
         return $this;
     }

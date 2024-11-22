@@ -90,12 +90,3 @@ function imprimer() {
     window.print();
 }
 
-function activerMenuContextuel(event) { // function qui affiche une menu contextuelle dans le tableau
-    event.preventDefault();
-    contextmenu.style.top=`${event.pageY}px`;
-    contextmenu.style.left=`${event.pageX}px`;
-    contextmenu.style.display="block";
-}
-document.addEventListener('click', (event)=>{
-    contextmenu.style.display="none";
-})

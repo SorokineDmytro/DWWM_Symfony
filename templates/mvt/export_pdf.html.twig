@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exportation Mouvement en PDF</title>
+    <style>
+        .w100{width:100%;}
+        .w70{width:70%;}
+        .m-auto{margin: 0 auto;}
+        table{border-collapse: collapse;}
+        .border{border: 1px solid gray;}
+        .border-right{border-right: 1px solid gray;}
+        .left{text-align: left;}
+        .center{text-align: center;}
+        .right{text-align: right;}
+        .bg-gray{background-color: gray; color: #fff;}
+        .px-5{padding: 0 5px;}
+    </style>
+</head>
+<body>
+    <div class="w70 m-auto">
+        <h1>{{mouvement.typeMouvement.libelle | upper}} No {{mouvement.numMouvement}}</h1>
+        <h4>Date : {{mouvement.dateMouvement | date('d/m/Y')}}</h4>
+        <h4>{{mouvement.tiers.typeTiers.libelle}} : {{mouvement.tiers.nomTiers}}</h4>
+        <h4>Adresse : {{mouvement.tiers.adresseTiers}}</h4>
+    </div>
+    <table class="w100 border">
+        <thead>
+            <tr class="bg-gray">
+                <th class="border-right center">CODE</th>
+                <th class="border-right center">DESIGNATION</th>
+                <th class="border-right center">PRIX UNITAIRE</th>
+                <th class="border-right center">QUANTITE</th>
+                <th class="border-right center">MONTANT</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set total = 0 %}
+
+            {% for ligne in ligneMouvements %} 
+                {% set montant = ligne.quantite * ligne.prixUnitaire %}
+                {% set total = total + montant %}
+                <tr class="border">
+                    <td class="px-5 border-right center">{{ ligne.produit.numProduit }}</td>
+                    <td class="px-5 border-right left">{{ ligne.produit.designation }}</td>
+                    <td class="px-5 border-right right">{{ ligne.produit.prixUnitaire | number_format(2, '.', ' ') }} €</td>
+                    <td class="px-5 border-right right">{{ ligne.quantite }}</td>
+                    <td class="px-5 border-right right">{{ montant | number_format(2, '.', ' ') }} €</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="center">Aucun produit saisie</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr class="border bg-gray">
+                <td colspan="4" class="border-right center">Total</td>
+                <td class="px-5 right">{{ total | number_format(2, '.', ' ') }} €</td>
+            </tr>
+        </tfoot>
+    </table>
+</body>
+</html>
