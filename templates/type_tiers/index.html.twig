@@ -5,7 +5,12 @@
 {% block body %}
     <h1>TypeTiers</h1>
 
-    <a class="btn btn-md btn-primary my-4" href="{{ path('app_type_tiers_new') }}">Nouveau type tiers</a>
+    <div class="line-button">
+        <a class="btn btn-md btn-primary my-4" href="{{ path('app_type_tiers_new') }}">Nouveau type tiers</a>
+        <a class="btn btn-md btn-success my-4" href="{{ path('app_typeTiers_import_excel') }}">Import Excel</a>
+        <a class="btn btn-md btn-success my-4" href="{{ path('app_typeTiers_export_excel') }}">Export Excel</a>
+        <a class="btn btn-md btn-primary my-4" href="javascript:window.print()">Imprimer</a>
+    </div> 
 
     <table class="table">
         <thead>

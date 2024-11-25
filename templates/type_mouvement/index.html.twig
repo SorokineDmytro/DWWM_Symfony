@@ -5,9 +5,9 @@
         <h1 class="titre text-center">{{title|upper}}</h1>
         <div class="line-button">
             <a class="btn btn-md btn-primary my-4" href="{{ path('app_type_mouvement_new') }}">Créer</a>
-            <button class="btn btn-md btn-success my-4" href="">Importer</button>
-            <button class="btn btn-md btn-success my-4" href="">Exporter</button>
-            <button class="btn btn-md btn-primary my-4" href="" onclick="window.print()">Imprimer</button>
+            <a class="btn btn-md btn-success my-4" href="{{ path('app_typeMouvement_import_excel') }}">Import Excel</a>
+            <a class="btn btn-md btn-success my-4" href="{{ path('app_typeMouvement_export_excel') }}">Export Excel</a>
+            <a class="btn btn-md btn-primary my-4" href="javascript:window.print()">Imprimer</a>
         </div>
         <table class="table w-100">
             <thead>

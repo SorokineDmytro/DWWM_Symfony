@@ -5,8 +5,13 @@
 {% block body %}
 <h1 class="titre text-center">LISTE TIERS</h1>
 
+<div class="line-button">
     <a class="btn btn-md btn-primary my-4" href="{{ path('app_tiers_new') }}">Nouveau tiers</a>
-    
+    <a class="btn btn-md btn-success my-4" href="{{ path('app_tiers_import_excel') }}">Import Excel</a>
+    <a class="btn btn-md btn-success my-4" href="{{ path('app_tiers_export_excel') }}">Export Excel</a>
+    <a class="btn btn-md btn-primary my-4" href="javascript:window.print()">Imprimer</a>
+</div>    
+
     <table class="table">
         <thead>
             <tr>

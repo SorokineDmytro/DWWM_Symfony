@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\MyFct;
 use App\Entity\TypeMouvement;
 use App\Form\TypeMouvementType;
 use Doctrine\ORM\EntityManager;
@@ -10,6 +11,7 @@ use App\Repository\TypeMouvementRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/typemouvement')]
 
@@ -92,4 +94,53 @@ class TypeMouvementController extends AbstractController
             'typeMouvement'=>$typeMouvement 
         ]);
     } 
+
+    #[Route('/import/excel', name: 'app_typeMouvement_import_excel', methods: ['GET'])]
+    public function importExcel(EntityManagerInterface $em) {
+        $filePath='/Users/sorokine/Codding/myProjects/2024/Symphony/typeMouvement.xlsx';
+        $r0=2;
+        $myFct=new MyFct();
+        $datas=$myFct->readExcel($filePath,$r0);
+        foreach($datas as $data){
+            $prefixe=$data[0];
+            $numeroInitial=$data[1];
+            $libelle=$data[2];
+            $format=$data[3];
+            $typeMouvement=$em->getRepository(TypeMouvement::class)->findOneBy(['prefixe'=>$prefixe]);
+            if(!$typeMouvement){
+                $categorie=new TypeMouvement;
+            }
+            $categorie->setPrefixe($prefixe);
+            $categorie->setNumeroInitial($numeroInitial);
+            $categorie->setLibelle($libelle);
+            $categorie->setFormat($format);
+            $em->persist($typeMouvement);
+            $em->flush();
+        }
+        return $this->redirectToRoute("app_typeMouvement_index");
+        }
+
+    #[Route('/export/excel', name: 'app_typeMouvement_export_excel', methods: ['GET'])]
+    public function exportExcel(TypeMouvementRepository $ttr) {
+        $typeMouvements = $ttr->findBy([], ['prefixe'=>'ASC']);
+        $datas[] = [
+            'PREFIXE',
+            'NUM INITIAL',
+            'LIBELLE',
+            'FORMAT',
+        ];
+        foreach($typeMouvements as $typeMouvement) {
+            $datas[] = [
+                $typeMouvement->getPrefixe(),
+                $typeMouvement->getNumeroInitial(),
+                $typeMouvement->getLibelle(),
+                $typeMouvement->getFormat(),
+            ];
+        }
+        $myFct=new MyFct();
+        $filePath = $filePath='/Users/sorokine/Codding/myProjects/2024/Symphony/all_typeMouvement.xlsx';
+        $r0 = 1;
+        $file = $myFct->writeExcel($datas,$filePath,$r0=1);
+        return $this->file($filePath,"Export typeMouvement.xlsx", ResponseHeaderBag::DISPOSITION_INLINE);
+    }
 }

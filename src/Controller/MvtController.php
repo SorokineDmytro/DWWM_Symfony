@@ -4,19 +4,24 @@ namespace App\Controller;
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use App\Entity\Tiers;
 use App\Form\MvtType;
 use App\Service\MyFct;
 use App\Entity\Produit;
 use App\Entity\Mouvement;
+use App\Entity\TypeMouvement;
 use App\Entity\LigneMouvement;
 use Doctrine\ORM\EntityManager;
 use App\Repository\ProduitRepository;
 use App\Repository\MouvementRepository;
+use App\Repository\TiersRepository;
+use App\Repository\TypeMouvementRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route("/mvt")]
 
@@ -247,5 +252,66 @@ class MvtController extends AbstractController
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="Export_mouvement.pdf"',
         ]);
+    }
+
+    #[Route('/import/excel', name: 'app_mouvement_import_excel', methods: ['GET'])]
+    public function importExcel(EntityManagerInterface $em) {
+        $filePath='/Users/sorokine/Codding/myProjects/2024/Symphony/mouvement.xlsx';
+        $r0=2;
+        $myFct=new MyFct();
+        $datas=$myFct->readExcel($filePath,$r0);
+        foreach($datas as $data){
+            $numMouvement=$data[0];
+            $dateMouvement=$data[1];
+            $type_mouvement_id=$data[2];
+            $tiers_id=$data[3];
+            $typeMouvement=$em->getRepository(TypeMouvement::class)->find($type_mouvement_id);
+            $tiers=$em->getRepository(Tiers::class)->find($tiers_id);
+            $mouvement=$em->getRepository(Mouvement::class)->findOneBy(['numMouvement'=>$numMouvement]);
+            if(!$mouvement){
+                $mouvement=new Mouvement;
+            }
+            $mouvement->setNumMouvement($numMouvement);
+            $mouvement->setDateMouvement($dateMouvement);
+            $mouvement->setTypeMouvement($typeMouvement);
+            $mouvement->setTiers($tiers);
+            $em->persist($mouvement);
+            $em->flush();
+        }
+        return $this->redirectToRoute("app_mouvement_index");
+        }
+
+    #[Route('/export/excel', name: 'app_mouvement_export_excel', methods: ['GET'])]
+    public function exportExcel(MouvementRepository $mr, TypeMouvementRepository $tmr, TiersRepository $tr) {
+        $mouvements = $mr->findBy([], ['dateMouvement'=>'ASC']);
+        $typeMouvement = $tmr->findBy([], ['id'=>'ASC']);
+        $tiers = $tr->findBy([], ['id'=>'ASC']);
+        $datas[] = [
+            'NUM MOUVEMENT',
+            'DATE MOUVEMENT',
+            'TYPE MOUVEMENT',
+            'TIERS',
+        ];
+        
+        foreach($mouvements as $mouvement) {
+            $typeMouvement = $mouvement->getTypeMouvement();
+            $libelle = $typeMouvement->getLibelle();
+
+            $tiers = $mouvement->getTiers();
+            $nomTiers = $tiers->getNomTiers();
+
+            $datas[] = [
+                $mouvement->getNumMouvement(),
+                $mouvement->getDateMouvement(),
+                $libelle,
+                $nomTiers,
+            ];
+        }
+       
+        $myFct=new MyFct();
+        $filePath = $filePath='/Users/sorokine/Codding/myProjects/2024/Symphony/all_mouvements.xlsx';
+        $r0 = 1;
+        $file = $myFct->writeExcel($datas,$filePath,$r0=1);
+        return $this->file($filePath,"Export mouvements.xlsx", ResponseHeaderBag::DISPOSITION_INLINE);
     }
 }

@@ -3,10 +3,14 @@
 {% block title %}Produit index{% endblock %}
 
 {% block body %}
-<div class="w70 m-auto my-4">
+<div class="w90 m-auto my-4">
     <h1 class="titre text-center">LISTE PRODUIT</h1>
-
-    <a class="btn btn-md btn-primary my-4" href="{{ path('app_produit_new') }}">Nouveau produit</a>
+    <div class="line-button">
+        <a class="btn btn-md btn-primary my-4" href="{{ path('app_produit_new') }}">Nouveau produit</a>
+        <a class="btn btn-md btn-success my-4" href="{{ path('app_produit_import_excel') }}">Import Excel</a>
+        <a class="btn btn-md btn-success my-4" href="{{ path('app_produit_export_excel') }}">Export Excel</a>
+        <a class="btn btn-md btn-primary my-4" href="javascript:window.print()">Imprimer</a>
+    </div>
 
     <table class="table W100">
         <thead>

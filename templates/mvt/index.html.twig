@@ -5,7 +5,9 @@
         <h1 class="titre">{{title | upper}}</h1>
         <div class="line-button">
             <button class="btn btn-md btn-primary my-4" onclick="creer()">Créer</button>
-            <button class="btn btn-md btn-primary my-4" onclick="window.print()">Imprimer</button>
+            <a class="btn btn-md btn-success my-4" href="{{ path('app_mouvement_import_excel') }}">Import Excel</a>
+            <a class="btn btn-md btn-success my-4" href="{{ path('app_mouvement_export_excel') }}">Export Excel</a>
+            <a class="btn btn-md btn-primary my-4" href="javascript:window.print()">Imprimer</a>
             <button class="btn btn-md btn-primary my-4" onclick="quitter()">Quitter</button>
         </div>
         <table class="table w-100">
