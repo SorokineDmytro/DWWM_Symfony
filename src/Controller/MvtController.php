@@ -23,13 +23,16 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-#[Route("/mvt")]
+#[Route("vente/mvt")]
 
 class MvtController extends AbstractController
 {
     #[Route('', name: 'app_mvt')]
     public function index(MouvementRepository $mr): Response
     {
+        if(!$this->isGranted('ROLE_ADMIN')){
+            return $this->redirectToRoute('app_accueil_erreur');
+        }
         $mouvements=$mr->findBy([],['id'=>'desc']);
         return $this->render('mvt/index.html.twig', [
             'title'=>'Liste Mouvements',

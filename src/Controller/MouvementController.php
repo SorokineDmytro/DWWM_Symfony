@@ -11,10 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+#[Route(path: "vente/mouvement")]
 class MouvementController extends AbstractController
 {
-    #[Route('/mouvement', name: 'app_mouvement')]
+    #[Route('/', name: 'app_mouvement')]
     public function index(MouvementRepository $mouvementRepository): Response
     {
         $mouvements = $mouvementRepository->findAll();

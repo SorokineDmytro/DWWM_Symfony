@@ -36,3 +36,9 @@ INSERT INTO ligneMouvement(mouvement_id, produit_id, quantite, prixUnitaire) VAL
 (4,4,50,2.50),
 (4,5,500,4.50),
 (4,7,150,5);
+
+
+--------------------------------------CREATION DE TABLE ROLES-----------------------------------
+---donner les droits aux utilisateurs
+UPDATE user SET roles='["ROLE_USER","ROLE_CAISSE"]' WHERE id = 1; 
+UPDATE user SET roles='["ROLE_ADMIN","ROLE_INFORMATIQUE","ROLE_ASSISTANT","ROLE_DEPOT","ROLE_CAISSE","ROLE_USER"]' WHERE id = 2; 

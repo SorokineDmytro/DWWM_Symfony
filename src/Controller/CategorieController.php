@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/categorie')]
+#[Route('/admin/categorie')]
 final class CategorieController extends AbstractController
 {
     #[Route(name: 'app_categorie_index', methods: ['GET'])]

@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/tiers')]
+#[Route('/vente/tiers')]
 final class TiersController extends AbstractController
 {
     #[Route(name: 'app_tiers_index', methods: ['GET'])]

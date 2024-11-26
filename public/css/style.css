@@ -283,6 +283,14 @@ table tr:hover {
     opacity: 90%;
 }
 
+.erreur-connexion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 70vh;
+}
+
 @media screen and (max-width: 600px) {
     .line-input {
         display: flex;

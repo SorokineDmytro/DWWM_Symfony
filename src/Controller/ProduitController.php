@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/produit')]
+#[Route('/depot/produit')]
 final class ProduitController extends AbstractController
 {
     #[Route(name: 'app_produit_index', methods: ['GET'])]

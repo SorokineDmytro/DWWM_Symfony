@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class AccueilController extends AbstractController
 {
     #[Route('/', name: 'app_accueil')]
+
     public function index(): Response
     {
         // $file = "accueil/index.html.twig";
@@ -23,5 +24,12 @@ class AccueilController extends AbstractController
             'controller_name' => 'AccueilController',
         ]);
 
+    }
+
+    #[Route("accueil/erreur", name: "app_accueil_erreur", methods: ['GET'])]
+    public function erreur() {
+        return $this->render('accueil/erreur.html.twig', [
+            'title' => 'Erreur de connexion',
+        ]);
     }
 }

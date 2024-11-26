@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block body %}
+    <div class="w90 m-auto">
+        <h1 class="titre">{{ title | upper }}</h1>
+        <div class="line-button">
+            <a class="btn btn-md btn-success my-4" href="javascript:creer()">Creer</a>
+            <a class="btn btn-md btn-primary my-4" href="javascript:afficher()">Afficher</a>
+            <a class="btn btn-md btn-primary my-4" href="javascript:modifier()">Modifier</a>
+            <a class="btn btn-md btn-danger my-4" href="javascript:supprimer()">Supprimer</a>
+            <a class="btn btn-md btn-success my-4" href="">Import Excel</a>
+            <a class="btn btn-md btn-success my-4" href="">Export Excel</a>
+            <a class="btn btn-md btn-primary my-4" href="javascript:window.print()">Imprimer</a>
+        </div>    
+    
+        <table class="table w100">
+            <thead>
+                <tr class="table-success">
+                    <th><input type="checkbox"></th>
+                    <th>USERNAME</th>
+                    <th>PASSWORD</th>
+                    <th>ROLES</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td><input type="checkbox" name="choix" id="{{ user.id }}" onclick="onlyOne(this)"></td>
+                        <td>{{ user.username }}</td>
+                        <td>******</td>
+                        <td>
+                            <select name="" id="" class="form-select" title="{{ user.roles|join('-') }}">
+                                {% for role in user.roles %}
+                                    <option value="">{{ role }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr class="table-success">
+                    <td colspan="4" class="text-center">Nombre d'utilisateur: {{ users | length }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        let url_user_edit = "{{path('app_user_edit', {'id':'_id'})}}";
+        let url_user_show = "{{path('app_user_show', {'id':'_id'})}}";
+        let url_user_delete = "{{path('app_user_delete', {'id':'_id'})}}";
+        
+        function creer() {
+            const url = url_user_edit.replace('_id', 0); // utilisation de lédit avec id 0 pour la création
+            document.location.href = url;
+        }
+
+        function afficher() {
+            const id = getIdChecked('choix');
+            if(id == 0) {
+                alert('Veuillez selectionner une ligne à modifier!');
+                return;
+            }
+            const url = url_user_show.replace('_id', id);
+            document.location.href = url;
+        }
+
+        function modifier() {
+            const id = getIdChecked('choix');
+            if(id == 0) {
+                alert('Veuillez selectionner une ligne à modifier!');
+                return;
+            }
+            const url = url_user_edit.replace('_id', id);
+            document.location.href = url;
+            // popupCenter(url, "Edition User", screen.width*0.70, screen.height*0.70);
+        }
+
+        function supprimer() {
+            const id = getIdChecked('choix');
+            if(id == 0) {
+                alert('Veuillez selectionner une ligne à modifier!');
+                return;
+            }
+            const response = confirm('Êtes-vous sûr de supprimer cette ligne ?');
+            if(response) {
+                const url = url_user_delete.replace('_id', id);
+                document.location.href = url;
+            }
+        }
+
+    </script>
+{% endblock %}

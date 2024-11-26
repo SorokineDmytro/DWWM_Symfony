@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-#[Route('/typemouvement')]
+#[Route('/admin/typemouvement')]
 
 class TypeMouvementController extends AbstractController
 {

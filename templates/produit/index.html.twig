@@ -6,8 +6,10 @@
 <div class="w90 m-auto my-4">
     <h1 class="titre text-center">LISTE PRODUIT</h1>
     <div class="line-button">
+    {% if(is_granted("ROLE_ADMIN")) %}
         <a class="btn btn-md btn-primary my-4" href="{{ path('app_produit_new') }}">Nouveau produit</a>
         <a class="btn btn-md btn-success my-4" href="{{ path('app_produit_import_excel') }}">Import Excel</a>
+    {% endif %}
         <a class="btn btn-md btn-success my-4" href="{{ path('app_produit_export_excel') }}">Export Excel</a>
         <a class="btn btn-md btn-primary my-4" href="javascript:window.print()">Imprimer</a>
     </div>
@@ -35,7 +37,9 @@
                 <td>{{ produit.categorie.libelle|default("")}}</td>
                 <td class="d-flex justify-content-between">
                     <a class="btn btn-md btn-success" href="{{ path('app_produit_show', {'id': produit.id}) }}">Afficher</a>
-                    <a class="btn btn-md btn-primary" href="{{ path('app_produit_edit', {'id': produit.id}) }}">Modifier</a>
+                    {% if(is_granted("ROLE_ADMIN")) %}
+                        <a class="btn btn-md btn-primary" href="{{ path('app_produit_edit', {'id': produit.id}) }}">Modifier</a>
+                    {% endif %}
                 </td>
             </tr>
             {% else %}

@@ -34,13 +34,13 @@
                                 <a href="{{ path('app_accueil') }}" class="nav-link text-white fs-4">Accueil</a>
                             </li>
                             <li class="nav-item ms-2">
-                                <a href="{{ path('app_mvt') }}" class="nav-link text-white fs-4">Mouvement</a>
+                                <a href="/vente/mouvement" class="nav-link text-white fs-4">Mouvement</a>
                             </li>
                             <li class="nav-item ms-2">
-                                <a href="{{ path('app_produit_index') }}" class="nav-link text-white fs-4">Produit</a>
+                                <a href="/depot/produit" class="nav-link text-white fs-4">Produit</a>
                             </li>
                             <li class="nav-item ms-2">
-                                <a href="{{ path('app_tiers_index') }}" class="nav-link text-white fs-4">Tiers</a>
+                                <a href="/vente/tiers" class="nav-link text-white fs-4">Tiers</a>
                             </li>
                             <li class="dropdown nav-item ms-2">
                                 <a href="" class="nav-link text-white fs-4 dropdown-toggle" data-bs-toggle="dropdown"
@@ -69,27 +69,29 @@
                                     </li>
                                 </ul>
                             </li>
+                            {% if(is_granted("ROLE_ADMIN")) %}
                             <li class="dropdown nav-item ms-2">
                                 <a href="" class="nav-link text-white fs-4 dropdown-toggle" data-bs-toggle="dropdown"
                                     data-bs-auto-close="outside">Paramêtre</a>
                                 <ul class="dropdown-menu bg-dark">
                                     <li class="nav-item ms-2">
-                                        <a href="/categorie" class="nav-link text-white">Catégorie</a>
+                                        <a href="/admin/categorie" class="nav-link text-white">Catégorie</a>
                                     </li>
                                     <li class="nav-item ms-2">
-                                        <a href="/user" class="nav-link text-white">User</a>
+                                        <a href="/admin/user" class="nav-link text-white">User</a>
                                     </li>
                                     <li class="nav-item ms-2">
-                                        <a href="/role" class="nav-link text-white">Role</a>
+                                        <a href="/admin/role" class="nav-link text-white">Role</a>
                                     </li>
                                     <li class="nav-item ms-2">
-                                        <a href="/typetiers" class="nav-link text-white">Type Tiers</a>
+                                        <a href="/admin/typetiers" class="nav-link text-white">Type Tiers</a>
                                     </li>
                                     <li class="nav-item ms-2">
-                                        <a href="/typemouvement" class="nav-link text-white">Type Mouvement</a>
+                                        <a href="/admin/typemouvement" class="nav-link text-white">Type Mouvement</a>
                                     </li>
                                 </ul>
                             </li>
+                            {% endif %}
                         </ul>
                         <div class="d-flex relative">
                             <a href="" class="nav-link text-white dropdown-toggle fs-3 ms-2" data-bs-toggle="dropdown">
@@ -141,8 +143,20 @@
                                 <button class="btn bg-dark" onclick="chercher(event)">
                                     <i class="fa fa-search text-white"></i>
                                 </button>
-                                <a href="" class="nav-link text-white fs-4 me-2">
-                                    <i class="fa fa-user mx-2 my-2"></i>Se connecter</a>
+                                {% if(app.user) %}
+                                    <a href="javascript:void()" class="nav-link text-white fs-4 me-2 dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-user mx-2 my-2"></i>{{app.user.username | capitalize}}</a>
+                                    <ul class="dropdown-menu">
+                                        <li class="nav-item"><a href="{{path('app_logout')}}" class="nav-link">Se deconnecter</a></li>
+                                        <li class="nav-item"><a href="#" class="nav-link">Profil</a></li>
+                                        <li class="nav-item"><a href="#" class="nav-link">Mot de passe</a></li>
+                                    </ul>
+                                {% else %}
+                                    <a href="javascript:void()" class="nav-link text-white fs-4 me-2 dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-user mx-2 my-2"></i>Visiteur</a>
+                                    <ul class="dropdown-menu">
+                                        <li class="nav-item"><a href="{{path('app_login')}}" class="nav-link">Se connecter</a></li>
+                                        <li class="nav-item"><a href="{{path('app_register')}}" class="nav-link">S'inscrire</a></li>
+                                    </ul>
+                                {% endif %}
                             </div>
                         </div>
 

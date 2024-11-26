@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/typetiers')]
+#[Route('/admin/typetiers')]
 final class TypeTiersController extends AbstractController
 {
     #[Route(name: 'app_type_tiers_index', methods: ['GET'])]
