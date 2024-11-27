@@ -1,0 +1,21 @@
+{%extends 'base.html.twig'%}
+{%block body%}
+    <div class="w70 m-auto">
+        <h1 class="titre">{{title|upper}}</h1>
+        {{form_start(form)}}
+            {{form_row(form.rang)}}
+            {{form_row(form.libelle)}}
+            {{form_row(form.url)}}
+            {{form_row(form.role)}}
+            {{form_row(form.icone)}}
+            {{form_row(form.parent)}}
+            <div class="line-button">
+                <a href="{{path('app_menu')}}" class="btn btn-md btn-success">Retour à la liste</a>
+                <button type="reset" class="btn btn-md btn-primary">Annuler</button>
+                <button type="submit" class="btn btn-md btn-primary">Enregistrer</button>
+            </div>
+
+        {{form_end(form)}}
+    </div>
+
+{%endblock%} 

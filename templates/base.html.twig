@@ -29,7 +29,8 @@
                         <i class="fa fa-bars"></i>
                     </a>
                     <div class="collapse navbar-collapse justify-content-between" id="nav">
-                        <ul class="nav navbar-nav">
+                        {{render(path('app_menu_affichage'))}}
+                        {# <ul class="nav navbar-nav">
                             <li class="nav-item ms-2">
                                 <a href="{{ path('app_accueil') }}" class="nav-link text-white fs-4">Accueil</a>
                             </li>
@@ -89,10 +90,13 @@
                                     <li class="nav-item ms-2">
                                         <a href="/admin/typemouvement" class="nav-link text-white">Type Mouvement</a>
                                     </li>
+                                    <li class="nav-item ms-2">
+                                        <a href="/menu" class="nav-link text-white">Menu</a>
+                                    </li>
                                 </ul>
                             </li>
                             {% endif %}
-                        </ul>
+                        </ul> #}
                         <div class="d-flex relative">
                             <a href="" class="nav-link text-white dropdown-toggle fs-3 ms-2" data-bs-toggle="dropdown">
                                 <i class="fa fa-bell text-white"></i>
@@ -175,6 +179,14 @@
                     <aside class="col-md-2 bg-white"> {% block aside_right %}{% endblock %}
                     </aside>
                 </div>
+                <div id="contextmenu" class="contextmenu">
+                    <ul>
+                        <li><a href="javascript:creer()" class='nav-link'>Créer</a></li>
+                        <li><a href="javascript:afficher()" class='nav-link'>Afficher</a></li>
+                        <li><a href="javascript:modifier()" class='nav-link'>Modifier</a></li>
+                        <li><a href="javascript:supprimer()" class='nav-link'>Supprimer</a></li>
+                    </ul>
+                </div> 
                 <div id="attente">
                     <img src="./public/img/loader2.gif" alt="">
                 </div>

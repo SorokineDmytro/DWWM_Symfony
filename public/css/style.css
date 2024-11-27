@@ -291,6 +291,18 @@ table tr:hover {
     min-height: 70vh;
 }
 
+.register, .connect {
+    margin: 20vh auto;
+    padding: 30px;
+    border: 1px solid #000;
+    border-radius: 15px;
+    background: hsla(235, 5%, 48%, 1);
+    background: linear-gradient(45deg, hsla(235, 5%, 48%, 1) 0%, hsla(0, 0%, 89%, 1) 100%);
+    background: -moz-linear-gradient(45deg, hsla(235, 5%, 48%, 1) 0%, hsla(0, 0%, 89%, 1) 100%);
+    background: -webkit-linear-gradient(45deg, hsla(235, 5%, 48%, 1) 0%, hsla(0, 0%, 89%, 1) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#74757F", endColorstr="#E3E3E3", GradientType=1 );
+}
+
 @media screen and (max-width: 600px) {
     .line-input {
         display: flex;
