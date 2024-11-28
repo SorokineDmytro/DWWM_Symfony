@@ -1,41 +1,47 @@
 {% extends 'base.html.twig' %}
 
 {% block title %} {{title}} {% endblock %}
-
 {% block body %}
-    <div class="w90 m-auto">
-        <h1 class="titre text-center">{{ title | upper }}</h1>
-        <div class="line-button">
-            <button class="btn btn-md btn-success my-4" onclick="creer()">Créer</button>
-            <button class="btn btn-md btn-primary my-4" onclick="afficher()">Afficher</button>
-            <button class="btn btn-md btn-primary my-4" onclick="modifier()">Modifier</button>
-            <button class="btn btn-md btn-danger my-4" onclick="supprimer()">Supprimer</button>
-            <button class="btn btn-md btn-success my-4" onclick="importer()">Importer</button>
-            <button class="btn btn-md btn-success my-4" onclick="exporter()">Exporter</button>
-            <button class="btn btn-md btn-primary my-4" onclick="window.print()">Imprimer</button>
-            <button class="btn btn-md btn-primary my-4" onclick="quitter()">Quitter</button>
+    {% if(is_granted("ROLE_ADMIN")) %}
+        <div class="w90 m-auto">
+            <h1 class="titre text-center">{{ title | upper }}</h1>
+            <div class="line-button">
+                <button class="btn btn-md btn-success my-4" onclick="creer()">Créer</button>
+                <button class="btn btn-md btn-primary my-4" onclick="afficher()">Afficher</button>
+                <button class="btn btn-md btn-primary my-4" onclick="modifier()">Modifier</button>
+                <button class="btn btn-md btn-danger my-4" onclick="supprimer()">Supprimer</button>
+                <button class="btn btn-md btn-success my-4" onclick="importer()">Importer</button>
+                <button class="btn btn-md btn-success my-4" onclick="exporter()">Exporter</button>
+                <button class="btn btn-md btn-primary my-4" onclick="window.print()">Imprimer</button>
+                <button class="btn btn-md btn-primary my-4" onclick="quitter()">Quitter</button>
+            </div>
+            <table class="table w-100">
+                <thead>
+                    <tr class="table-success text-light">
+                        <th class="w05 text-center"><input type="checkbox"></th>
+                        <th class="w05 text-center">RANG</th>
+                        <th class="w30 text-center">LIBELLE</th>
+                        <th class="w20 text-center">URL</th>
+                        <th class="w20 text-center">ROLE</th>
+                        <th class="w20 text-center">ICONE</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody_menu">
+                    {{ menu | raw }}
+                </tbody>
+                <tfoot>
+                    <tr class="table-success text-light">
+                        <th colspan="6" class="text-center">Menu</th>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
-        <table class="table w-100">
-            <thead>
-                <tr class="table-success text-light">
-                    <th class="w05 text-center"><input type="checkbox"></th>
-                    <th class="w05 text-center">RANG</th>
-                    <th class="w30 text-center">LIBELLE</th>
-                    <th class="w20 text-center">URL</th>
-                    <th class="w20 text-center">ROLE</th>
-                    <th class="w20 text-center">ICONE</th>
-                </tr>
-            </thead>
-            <tbody id="tbody_menu">
-                {{ menu | raw }}
-            </tbody>
-            <tfoot>
-                <tr class="table-success text-light">
-                    <th colspan="6" class="text-center">Menu</th>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
+    {% else %}
+        {% set redirect_url = path('app_accueil_erreur') %}
+    <script>
+        window.location.href = "{{ redirect_url }}";
+    </script>
+    {% endif %}
 {% endblock %}
 
 {% block script %}

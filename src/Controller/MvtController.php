@@ -30,7 +30,7 @@ class MvtController extends AbstractController
     #[Route('', name: 'app_mvt')]
     public function index(MouvementRepository $mr): Response
     {
-        if(!$this->isGranted('ROLE_ADMIN')){
+        if(!$this->isGranted('ROLE_CAISSE')){
             return $this->redirectToRoute('app_accueil_erreur');
         }
         $mouvements=$mr->findBy([],['id'=>'desc']);
@@ -230,6 +230,60 @@ class MvtController extends AbstractController
         $response = [
             'message' => $message,
             'ok' => $ok,
+        ];
+        return new JsonResponse($response);
+    }
+
+    #[Route('/update/ligne/{id}', name:"app_mvt_update_ligne", methods:["GET", "POST"])]
+    public function updateLigne(LigneMouvement $ligneMouvement, EntityManagerInterface $em, Request $request)
+    {
+        if ($request->isMethod('POST')) {
+            $quantite = $request->get('quantite');
+            $prixUnitaire = $request->get('prixUnitaire');
+
+        if ($quantite !== null && $prixUnitaire !== null) {
+            $ligneMouvement->setQuantite($quantite);
+            $ligneMouvement->setPrixUnitaire($prixUnitaire);
+            $em->persist($ligneMouvement);
+            $em->flush();
+            $response = [
+                "message" => "Modification bien effectuée !",
+                "ok" => 1,
+            ];
+        } else {
+            $response = [
+                "message" => "Modification non effectuée !",
+                "ok" => 0,
+            ];
+        }
+    } else {
+        $response = [
+            "numProduit" => $ligneMouvement->getProduit()->getNumProduit(),
+            "designation" => $ligneMouvement->getProduit()->getDesignation(),
+            "prixUnitaire" => $ligneMouvement->getPrixUnitaire(),
+            "quantite" => $ligneMouvement->getQuantite(),
+            "ok" => 1,
+        ];
+    }
+    return new JsonResponse($response);
+    }
+
+    #[Route('/delete/ligne/{id}', name:"app_mvt_delete_ligne", methods:["GET"])]
+    public function deleteLigne($id, EntityManagerInterface $em)
+    {
+        $ligneMouvement = $em->getRepository(LigneMouvement::class)->find($id);
+        if ($ligneMouvement) {
+            $em->remove($ligneMouvement);
+            $em->flush();
+            $message = "Suppression bien effectuée !";
+            $ok = 1;
+        } else {
+            $message = "Suppression non effectuée !";
+            $ok = 0;
+        }
+        $response = [
+            "message" => $message,
+            "ok" => $ok,
         ];
         return new JsonResponse($response);
     }

@@ -61,7 +61,7 @@
             <a href="{{path('app_mvt')}}" class="btn bnt-medium btn-primary">Mouvement</a>
             <button class="btn bnt-medium btn-primary" onclick="modifier()">Modifier</button>
             <button class="btn bnt-medium btn-danger" onclick="supprimer()">Supprimer</button>
-            <button class="btn bnt-medium btn-primary" onclick="imprimer()">PDF</button>
+            <button class="btn bnt-medium btn-primary" onclick="exportPdf()">PDF</button>
             <a href="{{path('app_accueil')}}" class="btn bnt-medium btn-primary">Quitter</a>
         </div>
         <table class="table w100">
@@ -75,14 +75,16 @@
                     <th class="w10 text-center">MONTANT</th>
                 </tr>
                 <tr>
-                    <th id="th_proposition" class="w25 text-center" colspan="2">
-                        <input type="text" id="numProduit" name="numProduit" class="form-control text-center" placeholder="CODE">
-                        <div id="proposition">Hello</div>
+                    <th colspan="2" id="th_proposition">
+                        <input type="text" id="numProduit" name="numProduit" class="form-control">
+                        <div id="proposition"></div>
+                        <input type="hidden" id="ligneId" name="ligneId">
+                        <!-- Champ caché pour stocker l'ID de la ligne à modifier -->
                     </th>
                     <th class="w40 text-center"><input type="text" id="designation" name="designation" class="form-control text-center" disabled></th>
                     <th class="w10 text-center"><input type="text" id="prixUnitaire" name="prixUnitaire" class="form-control text-center" disabled></th>
                     <th class="w10 text-center"><input type="text" id="quantite" name="quantite" class="form-control text-end" placeholder="0.00"></th>
-                    <th class="w10 text-center"><button class="btn bnt-medium btn-primary w100" onclick="valider()">Valider</button></th>
+                    <th class="w10 text-center"><button class="btn bnt-medium btn-primary w100" onclick="enregistrer()">Valider</button></th>
                 </tr>
             </thead>
             <tbody id="tbody_ligne_mouvement">
@@ -120,15 +122,78 @@
 {% block script %}
 <script>
     let url_mouvement_search_produit = "{{path('app_mvt_search_produit')}}";
-    let url_tbody_fetch = "{{path('app_mvt_ligne_tbody',{'id':'id'})}}";
+    let url_tbody_fetch = "{{path('app_mvt_ligne_tbody',{'id':'_id'})}}";
+    let url_check_num_produit = "{{path('app_mvt_check_num_produit')}}";
+    let url_save_ligne = "{{path('app_mvt_save_ligne',{'id':'_id'})}}";
+    let url_update_ligne = "{{path('app_mvt_update_ligne', {'id' : '_id'})}}";
+    let url_delete_ligne = "{{path('app_mvt_delete_ligne', {'id' : '_id'})}}";
+    let url_export_pdf = "{{path('app_mvt_export_pdf',{'id':'_id'})}}"
+
     proposition.style.visibility="hidden";
     remplirTbody();
+    
+    quantite.addEventListener('keydown', event => {
+        if(event.keyCode == 13) {
+            enregistrer();
+        }
+    })
+
+    function enregistrer() {
+        const ligneId = document.getElementById('ligneId').value;
+        let url = ligneId ? url_update_ligne.replace('_id', ligneId) : url_save_ligne.replace('_id', id.value);
+        let data = new FormData();
+        data.append('numProduit', numProduit.value);
+        data.append('quantite', quantite.value);
+        data.append('prixUnitaire', prixUnitaire.value);
+
+        fetch(url, {
+            method: "POST",
+            body: data,
+        })
+        .then(response => response.json())
+        .then(response => {
+            let ok = parseInt(response.ok);
+            if (ok == 1) {
+                remplirTbody();
+            } else {
+                alert("Il existe une erreur !");
+            }
+            numProduit.value = "";
+            designation.value = "";
+            quantite.value = "";
+            prixUnitaire.value = "";
+            numProduit.focus();
+            document.getElementById('ligneId').value = ""; // Réinitialiser l'ID de la ligne à modifier
+        });
+    }
+
+    function verifierNumProduit() {
+        let data = new FormData();
+        data.append('numProduit', numProduit.value);
+        fetch(url_check_num_produit, {
+            method:'POST',
+            body:data
+        })
+        .then(response => response.json())
+        .then(response => {
+            let row = response.row;
+            let ok = parseInt(response.ok);
+            if(ok == 0) {
+                alert(`Le numProduit = ${row.numProduit} est introuvable!`);
+            } else {
+                numProduit.value = row.numProduit;
+                designation.value = row.designation;
+                prixUnitaire.value = row.prixUnitaire;
+                quantite.value = 1;
+                quantite.focus();
+            }
+        })
+    }
+
     function remplirTbody() {
-        alert('ok');
-        let url = url_tbody_fetch.replace('id', id.value);
-        alert(url);
-        
-        fetch(url);
+        showLoader();
+        let url = url_tbody_fetch.replace('_id', id.value);
+        fetch(url)
         .then(response => response.json())
         .then(response => {
             let rows = response.rows;
@@ -138,16 +203,17 @@
                     <tr>
                         <td class='w5 text-center'><input type='checkbox' id='${row.id}' name='choix' onclick='onlyOne(this)'></td>
                         <td class='w25 text-center'>${row.numProduit}</td>
-                        <td class='w40 text-center'>${row.designtion}</td>
+                        <td class='w40 text-center'>${row.designation}</td>
                         <td class='w10 text-center'>${row.prixUnitaire}</td>
                         <td class='w10 text-center'>${row.quantite}</td>
                         <td class='w10 text-center'>${row.montant}</td>
                     </tr>
                 `
             }).join('');
-        tbody_ligne_mouvement.innerHTML = html;
-        th_total.textContent=total+" €";
-        p_total.textContent=total+" €";
+            tbody_ligne_mouvement.innerHTML = html;
+            th_total.textContent=total+" €";
+            p_total.textContent=total+" €";
+            hideLoader();
         })
     }
 
@@ -173,28 +239,50 @@
         })
       }else{
         proposition.style.visibility="hidden";
-        // let data = new FormData();
-        // data.append('mouvement_id', id.value);
-        // data.append('numProduit', numProduit.value);
-        // data.append('quantite', quantite.value);
-        // alert("Vous avez valider");
+        verifierNumProduit();
       }
     })
     proposition.addEventListener('click', event=>{
 
         proposition.style.visibility = "hidden";
         numProduit.value = event.target.id;
-        numProduit.focus();
+        verifierNumProduit();
+        quantite.focus();
     })
 
     function modifier(){
         
     }
-    function supprimer(){
-
+    
+    function supprimer() {
+        {# const id = getIdChecked('choix');
+        if (id == 0) {
+            alert("Veuillez sélectionner une ligne à supprimer !");
+            return;
+        }
+        let url = url_delete_ligne.replace('_id', id);
+        const response = confirm("êtes-vous sur de supprimer cette ligne ?");
+        if (response) {
+            fetch(url, {
+                method: 'GET',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok == 1) {
+                        remplirTbody();
+                    } else {
+                        alert(Il existe une erreur : ${data.message});
+                    }
+                })
+                .catch(error => {
+                    alert(Il existe une erreur : ${error.message});
+                })
+        } #}
     }
-    function imprimer(){
 
+    function exportPdf(){
+        let url = url_export_pdf.replace('_id', id.value);
+        popupCenter(url, "Export en PDF", screen.width*0.70, screen.height*0.70);
     }
 </script>
 {% endblock %}
