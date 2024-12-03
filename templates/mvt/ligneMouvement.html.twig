@@ -333,7 +333,7 @@
             return;
         }
         let url = url_delete_ligne.replace('_id', id);
-        const response = confirm("êtes-vous sur de supprimer cette ligne ?");
+        const response = confirm("Êtes-vous sur de supprimer cette ligne ?");
         if (response) {
             fetch(url, {
                 method: 'GET',

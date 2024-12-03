@@ -9,8 +9,10 @@
     {% if(is_granted("ROLE_ADMIN")) %}
         <a class="btn btn-md btn-primary my-4" href="{{ path('app_produit_new') }}">Nouveau produit</a>
         <a class="btn btn-md btn-success my-4" href="{{ path('app_produit_import_excel') }}">Import Excel</a>
+        <a class="btn btn-md btn-success my-4" href="javascript:importExcel()">Import Modèle Excel</a>
+        <input type="file" name="excel" id="excel" hidden>
     {% endif %}
-        <a class="btn btn-md btn-success my-4" href="{{ path('app_produit_export_excel') }}">Export Excel</a>
+        <a class="btn btn-md btn-success my-4" href="{{ path('app_produit_export_modele_excel') }}">Export Excel</a>
         <a class="btn btn-md btn-primary my-4" href="javascript:window.print()">Imprimer</a>
     </div>
 
@@ -49,7 +51,30 @@
             {% endfor %}
         </tbody>
     </table>
-
     
 </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        const url_produit_index = "{{ path('app_produit_index') }}";
+        const url_import_excel = "{{ path('app_produit_import_modele_excel') }}";
+        function importExcel(){
+            excel.click();
+        }
+        excel.addEventListener('change', event => {
+            let data = new FormData();
+            data.append('excel', excel.files[0]);
+            fetch(url_import_excel, {
+                method: "POST",
+                body: data,
+            })
+            .then(response => response.json())
+            .then(response => {
+                alert(response);
+                document.location.href = url_produit_index;
+            })
+        })
+
+    </script>
 {% endblock %}

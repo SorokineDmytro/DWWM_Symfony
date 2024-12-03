@@ -6,6 +6,25 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
     class MyFct {
+        public function writeModeleExcel($datas,$fileModele,$filePath,$r0) {
+            $spreadsheet=IOFactory::load($fileModele);
+            $sheet=$spreadsheet->getActiveSheet();
+            $r=$r0;
+            $colonnes=$this->excelColonnes();
+            foreach($datas as $data){
+                $c=0;
+                foreach($data as $key=>$d){
+                    $colonne=$colonnes[$c];
+                    $cell="$colonne$r";
+                    $sheet->setCellValue($cell,$d);
+                    $c++;
+                }
+                $r++;
+            }
+            $writer=new Xlsx($spreadsheet);
+            $writer->save($filePath);
+            return $filePath;
+        }
 
         public function writeExcel($datas,$filePath,$r0=1){
             $spreadsheet=new Spreadsheet();

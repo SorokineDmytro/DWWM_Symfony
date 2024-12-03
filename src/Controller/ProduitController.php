@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -136,6 +137,61 @@ final class ProduitController extends AbstractController
         $filePath = $filePath='/Users/sorokine/Codding/myProjects/2024/Symphony/all_produit.xlsx';
         $r0 = 1;
         $file = $myFct->writeExcel($datas,$filePath,$r0=1);
+        return $this->file($filePath,"Export produit.xlsx", ResponseHeaderBag::DISPOSITION_INLINE);
+    }
+
+    #[Route("/import/modele_excel",name:"app_produit_import_modele_excel",methods:["GET","POST"])]
+    public function importModelExcel(EntityManagerInterface $em,Request $request){
+        if(isset($_FILES['excel'])){
+            $filePath=$_FILES['excel']['tmp_name']; 
+            $myFct=new MyFct();
+            $r0=3; 
+            $datas=$myFct->readExcel($filePath,$r0);
+            foreach($datas as $data){
+                $numProduit= (string) $data[0];
+                $designation= (string) $data[1];
+                $prixUnitaire= (float) $data[2];
+                $prixRevient= (float) $data[3];
+                $categorie_id= (int) $data[4];
+                $categorie=$em->getRepository(Categorie::class)->find($categorie_id);
+                $produit=$em->getRepository(Produit::class)->findOneBy(['numProduit'=>$numProduit]);
+                if(!$produit){  // Le produit n'existe pas
+                    $produit=new Produit;
+                }
+                $produit->setNumProduit($numProduit);
+                $produit->setDesignation($designation);
+                $produit->setPrixUnitaire($prixUnitaire);
+                $produit->setPrixRevient($prixRevient);
+                $produit->setCategorie($categorie);
+                $em->persist($produit);
+            }
+            $em->flush();
+            $response="Importation bien faite!";
+       }else{
+            $response="Vous n'avez pas choisi un fichier Excel!";
+        }
+
+        return new JsonResponse($response);
+
+    } 
+
+
+    #[Route('/export/modele_excel', name: 'app_produit_export_modele_excel', methods: ['GET'])]
+    public function exportModelExcel(ProduitRepository $pr) {
+        $produits = $pr->findBy([], ['numProduit'=>'ASC']);
+        foreach($produits as $produit) {
+            $datas[] = [
+                $produit->getNumProduit(),
+                $produit->getDesignation(),
+                $produit->getPrixUnitaire(),
+                $produit->getPrixRevient(),
+            ];
+        }
+        $myFct=new MyFct();
+        $fileModele = __DIR__."/../../public/modeles/Modele_Liste_Produits.xlsx";
+        $filePath = __DIR__."/../../public/modeles/Liste_Produits.xlsx";
+        $r0 = 1;
+        $file = $myFct->writeModeleExcel($datas,$fileModele,$filePath,$r0=3);
         return $this->file($filePath,"Export produit.xlsx", ResponseHeaderBag::DISPOSITION_INLINE);
     }
 }
