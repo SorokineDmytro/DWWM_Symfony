@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-#[Route("vente/mvt")]
+#[Route("mvt")]
 
 class MvtController extends AbstractController
 {
@@ -371,4 +371,19 @@ class MvtController extends AbstractController
         $file = $myFct->writeExcel($datas,$filePath,$r0=1);
         return $this->file($filePath,"Export mouvements.xlsx", ResponseHeaderBag::DISPOSITION_INLINE);
     }
+
+    #[Route('/type/{prefixe}', name: 'app_mvt_type', methods: ['GET'])]
+    public function indexType(MouvementRepository $mr,TypeMouvementRepository $tr, $prefixe){
+        $typeMouvement=$tr->findOneBy(['prefixe'=>$prefixe]);
+        if($typeMouvement) {
+            $libelle = $typeMouvement->getLibelle();
+        } else {
+            $libelle = 'inconnue';
+        }
+        $mouvements=$mr->findBy(['typeMouvement'=>$typeMouvement],["numMouvement"=>"DESC"]);
+        return $this->render("mvt/index.html.twig",[
+            'title'=>"Liste ".$libelle,
+            'mouvements'=>$mouvements,
+        ]);
+    } 
 }

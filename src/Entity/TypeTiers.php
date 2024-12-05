@@ -35,9 +35,16 @@ class TypeTiers
     #[ORM\OneToMany(targetEntity: Tiers::class, mappedBy: 'typeTiers')]
     private Collection $tiers;
 
+    /**
+     * @var Collection<int, TypeMouvement>
+     */
+    #[ORM\OneToMany(targetEntity: TypeMouvement::class, mappedBy: 'typeTiers')]
+    private Collection $typeMouvements;
+
     public function __construct()
     {
         $this->tiers = new ArrayCollection();
+        $this->typeMouvements = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -126,5 +133,35 @@ class TypeTiers
     public function __toString()
     {
         return $this->prefixe." - ".$this->libelle;
+    }
+
+    /**
+     * @return Collection<int, TypeMouvement>
+     */
+    public function getTypeMouvements(): Collection
+    {
+        return $this->typeMouvements;
+    }
+
+    public function addTypeMouvement(TypeMouvement $typeMouvement): static
+    {
+        if (!$this->typeMouvements->contains($typeMouvement)) {
+            $this->typeMouvements->add($typeMouvement);
+            $typeMouvement->setTypeTiers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTypeMouvement(TypeMouvement $typeMouvement): static
+    {
+        if ($this->typeMouvements->removeElement($typeMouvement)) {
+            // set the owning side to null (unless already changed)
+            if ($typeMouvement->getTypeTiers() === $this) {
+                $typeMouvement->setTypeTiers(null);
+            }
+        }
+
+        return $this;
     }
 }

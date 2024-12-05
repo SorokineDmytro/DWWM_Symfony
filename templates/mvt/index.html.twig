@@ -48,7 +48,7 @@
 {% endblock %}
 {% block script %}
 <script>
-    let url_new = "{{path('app_mvt_new')}}";
+    let url_new = "{{path('app_mvt_new', {'prefixe':'prefixe'})}}";
     let url_show = "{{path('app_mvt_show',{'id':'id'})}}"; // = /mvt/show/id
     let url_update = "{{path('app_mvt_update',{'id':'id'})}}"; // = /mvt/update/id
     let url_delete = "{{path('app_mvt_delete',{'id':'id'})}}"; // = /mvt/delete/id

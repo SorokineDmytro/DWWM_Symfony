@@ -34,6 +34,9 @@ class TypeMouvement
     #[ORM\OneToMany(targetEntity: Mouvement::class, mappedBy: 'typeMouvement')]
     private Collection $tirs;
 
+    #[ORM\ManyToOne(inversedBy: 'typeMouvements')]
+    private ?TypeTiers $typeTiers = null;
+
     public function __construct()
     {
         $this->tirs = new ArrayCollection();
@@ -95,12 +98,12 @@ class TypeMouvement
     /**
      * @return Collection<int, Mouvement>
      */
-    public function getTirs(): Collection
+    public function getTiers(): Collection
     {
         return $this->tirs;
     }
 
-    public function addTir(Mouvement $tir): static
+    public function addTier(Mouvement $tir): static
     {
         if (!$this->tirs->contains($tir)) {
             $this->tirs->add($tir);
@@ -110,7 +113,7 @@ class TypeMouvement
         return $this;
     }
 
-    public function removeTir(Mouvement $tir): static
+    public function removeTier(Mouvement $tir): static
     {
         if ($this->tirs->removeElement($tir)) {
             // set the owning side to null (unless already changed)
@@ -125,5 +128,17 @@ class TypeMouvement
     public function __toString()
     {
         return $this->prefixe." - ".$this->libelle;
+    }
+
+    public function getTypeTiers(): ?TypeTiers
+    {
+        return $this->typeTiers;
+    }
+
+    public function setTypeTiers(?TypeTiers $typeTiers): static
+    {
+        $this->typeTiers = $typeTiers;
+
+        return $this;
     }
 }

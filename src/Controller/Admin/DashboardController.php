@@ -8,6 +8,7 @@ use App\Entity\Tiers;
 use App\Entity\Produit;
 use App\Entity\Categorie;
 use App\Entity\TypeTiers;
+use App\Entity\TypeMouvement;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -63,6 +64,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Ajout Role', 'fas fa-user-edit', Role::class)->setAction(Crud::PAGE_NEW),
             MenuItem::linkToCrud('Liste Role', 'fas fa-list', Role::class),
         ]);
+        yield MenuItem::linkToCrud('TypeMouvement', 'fas fa-arrow-right-arrow-left', TypeMouvement::class);
         yield MenuItem::linkToRoute("Retour à l'accueil", 'fas fa-backward', 'app_accueil');
     }
 }
