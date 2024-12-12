@@ -36,14 +36,14 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/informatique, roles: [ROLE_INFORMATIQUE, ROLE_ADMIN] }
-        - { path: ^/assistant, roles: [ROLE_ASSISTANT, ROLE_INFORMATIQUE, ROLE_ADMIN] }
-        - { path: ^/vente, roles: [ROLE_CAISSE, ROLE_DEPOT, ROLE_ASSISTANT, ROLE_INFORMATIQUE, ROLE_ADMIN] }
-        - { path: ^/depot, roles: [ROLE_DEPOT, ROLE_ASSISTANT, ROLE_INFORMATIQUE, ROLE_ADMIN] }
-        - { path: ^/caisse, roles: [ROLE_CAISSE, ROLE_ASSISTANT, ROLE_INFORMATIQUE, ROLE_ADMIN] }
-        - { path: ^/profile, roles: ROLE_USER }
-    access_denied_url: app_accueil_erreur
+    #     - { path: ^/admin, roles: ROLE_ADMIN }
+    #     - { path: ^/informatique, roles: [ROLE_INFORMATIQUE, ROLE_ADMIN] }
+    #     - { path: ^/assistant, roles: [ROLE_ASSISTANT, ROLE_INFORMATIQUE, ROLE_ADMIN] }
+    #     - { path: ^/vente, roles: [ROLE_CAISSE, ROLE_DEPOT, ROLE_ASSISTANT, ROLE_INFORMATIQUE, ROLE_ADMIN] }
+    #     - { path: ^/depot, roles: [ROLE_DEPOT, ROLE_ASSISTANT, ROLE_INFORMATIQUE, ROLE_ADMIN] }
+    #     - { path: ^/caisse, roles: [ROLE_CAISSE, ROLE_ASSISTANT, ROLE_INFORMATIQUE, ROLE_ADMIN] }
+    #     - { path: ^/profile, roles: ROLE_USER }
+    # access_denied_url: app_accueil_erreur
 when@test:
     security:
         password_hashers:

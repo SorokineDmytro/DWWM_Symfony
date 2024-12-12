@@ -27,6 +27,66 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MvtController extends AbstractController
 {
+    #[Route('/api/type/{prefixe}', name: 'app_mvt_api_type', methods: ['GET'])]
+    public function apiIndexType(EntityManagerInterface $em, $prefixe,) {
+        header("Access-Control-Allow-Origin: *");
+		header("Access-Control-Allow-Headers: *");
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+        $typeMouvement = $em->getRepository(TypeMouvement::class)->findOneBy(['prefixe' => $prefixe]);
+        if($typeMouvement) {
+            $error = false;
+            $mouvements = $em->getRepository(Mouvement::class)->findBy(['typeMouvement' => $typeMouvement], ['id' => 'DESC']);
+            $rows = [];
+            $totaux = 0;
+            if($mouvements) {
+                foreach($mouvements as $mouvement) {
+                    $total = $mouvement->getTotal();
+                    $totaux += $total;
+                    $rows[] = [
+                        'id' => $mouvement->getId(),
+                        'code' => $mouvement->getNumMouvement(),
+                        'date' => $mouvement->getDateMouvement()->format('d/m/Y'),
+                        'nom' => $mouvement->getTiers()->getNomTiers(),
+                        'total' => number_format($total, 2,'.', ' '),
+                    ];
+                }
+                $response = [
+                    'rows' => $rows,
+                    'totaux' => number_format($totaux, 2,'.', ' '),
+                ];
+            } else {
+                $rows[] = [
+                    'id' => 0,
+                    'code' => '',
+                    'date' => '',
+                    'nom' => "Type mouvement '$prefixe' introuvable!",
+                    'total' => 0,
+                ];
+                $response = [
+                    'rows' => $rows,
+                    'totaux' => 0,
+                ];
+            }
+        } else {
+            $error = true;
+        }
+        if($error) {
+            $rows[] = [
+                'id' => 0,
+                'code' => '',
+                'date' => '',
+                'nom' => "Type mouvement '$prefixe' introuvable!",
+                'total' => 0,
+            ];
+            $response = [
+                'rows' => $rows,
+                'totaux' => 0,
+            ];
+        }
+        echo json_encode($response);
+        exit();
+    }
+
     #[Route('', name: 'app_mvt')]
     public function index(MouvementRepository $mr): Response
     {

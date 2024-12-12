@@ -25,7 +25,7 @@ class Tiers
     private ?string $adresseTiers = null;
 
     #[ORM\ManyToOne(inversedBy: 'tiers')]
-    #[ORM\JoinColumn(name:'typeTiers_id', nullable: false)]
+    #[ORM\JoinColumn(name:'typeTiers_id', nullable: true)]
     private ?TypeTiers $typeTiers = null;
 
     /**

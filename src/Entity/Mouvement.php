@@ -121,4 +121,16 @@ class Mouvement
 
         return $this;
     }
+
+    public function getTotal() {
+        $ligneMouvements = $this->getLigneMouvements();
+        $total = 0;
+        foreach($ligneMouvements as $ligneMouvement) {
+            $quantite = $ligneMouvement->getQuantite();
+            $prixUnitaire = $ligneMouvement->getPrixUnitaire();
+            $montant = $quantite * $prixUnitaire;
+            $total += $montant;
+        }
+        return $total;
+    }
 }

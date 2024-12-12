@@ -19,6 +19,78 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/depot/produit')]
 final class ProduitController extends AbstractController
 {
+    #[Route('/api', name:'app_produit_api', methods:["GET"])]
+    public function apiProduit(ProduitRepository $pr){
+		header("Access-Control-Allow-Origin: *");
+		header("Access-Control-Allow-Headers: *");
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+		$produits=$pr->findBy([],['id'=>'ASC']);
+		$response=[];
+		foreach($produits as $produit){
+			$response[]=[
+				'id'=>$produit->getId(),
+				'code'=>$produit->getNumProduit(),
+				'designation'=>$produit->getDesignation(),
+				'pu'=>$produit->getPrixUnitaire(),
+				'pr'=>$produit->getPrixUnitaire()/2,
+            ];
+		}
+		echo json_encode($response);
+		exit();
+	} 
+
+    #[Route('/api/edit', name:'app_produit_api_edit', methods:["GET", "POST"])]
+    public function apiEditProduit(EntityManagerInterface $em, Request $request) {
+        header("Access-Control-Allow-Origin: *");
+		header("Access-Control-Allow-Headers: *");
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+        $edit_id = (int) $request->get('edit_id');
+        $numProduit = $request->get('numProduit');
+        $designation = $request->get('designation');
+        $prixUnitaire = $request->get('prixUnitaire');
+        $prixRevient = $request->get('prixRevient');
+        $error = false;
+        if($edit_id == 0) {
+            $produit = new Produit;
+        } else {
+            $produit = $em->getRepository(Produit::class)->find($edit_id);
+            if(!$produit) {
+                $error = true;
+            }
+        }
+        if($error) {
+            $response = "Erreur d'enregistrement! Le produit dont l'id = $edit_id n'existe pas!";
+        } else {
+            $produit->setNumProduit($numProduit);
+            $produit->setDesignation($designation);
+            $produit->setPrixUnitaire($prixUnitaire);
+            $produit->setPrixRevient($prixRevient);
+            $em->persist($produit);
+            $em->flush();
+            $response = "Enregistrement bien fait";
+        }
+        echo json_encode($response);
+        exit();
+    }
+
+    #[Route("/api/delete", name:"app_produit_api_delete", methods:["GET", "POST"])]
+	public function apiDeleteProduit(EntityManagerInterface $em, Request $request){
+        header("Access-Control-Allow-Origin: *");
+		header("Access-Control-Allow-Headers: *");
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+		$id = (int) $request->get('id');
+		$produit = $em->getRepository(Produit::class)->find($id);
+		if($produit) {
+			$em->remove($produit);
+			$em->flush();
+			$response = "Suppression bien faite dans la base de données!";
+		}else{
+			$response = "Il existe une erreur sur la suppression de id= $id! Suppression annulée!";
+		}
+		echo json_encode($response);
+		exit();
+	} 
+
     #[Route(name: 'app_produit_index', methods: ['GET'])]
     public function index(ProduitRepository $produitRepository): Response
     {
@@ -194,4 +266,6 @@ final class ProduitController extends AbstractController
         $file = $myFct->writeModeleExcel($datas,$fileModele,$filePath,$r0=3);
         return $this->file($filePath,"Export produit.xlsx", ResponseHeaderBag::DISPOSITION_INLINE);
     }
+
+    
 }
